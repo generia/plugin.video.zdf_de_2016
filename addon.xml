@@ -9,8 +9,8 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="en_GBb">ZDF Mediathek 2016</summary>
     <summary lang="de_DE">ZDF Mediathek 2016</summary>
-    <description lang="en_GB">ZDF Mediathek 2016 new variant after zdf.de website relauch</description>
-    <description lang="de_DE">ZDF Mediathek 2016 neue Variante nach zdf.de Website Relauch</description>
+    <description lang="en_GB">ZDF Mediathek 2016 new variant after zdf.de website relaunch</description>
+    <description lang="de_DE">ZDF Mediathek 2016 neue Variante nach zdf.de Website Relaunch</description>
 	<disclaimer lang="en">Some parts of this addon may not be legal in your country of residence - please check with your local laws before installing.</disclaimer>
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<source>https://github.com/generia/plugin.video.zdf_de_2016</source>
@@ -20,7 +20,7 @@
     <platform>all</platform>
     <news></news>
     <assets>
-        <icon>icon.png</icon>
+        <icon>icon-mm.png</icon>
         <fanart></fanart>
         <screenshot></screenshot>
     </assets>
