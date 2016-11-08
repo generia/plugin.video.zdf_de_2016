@@ -41,14 +41,12 @@ class RubricPage(ItemPage):
     def _renderClusters(self, clusters, response, apiToken, rubricUrl):
         for cluster in clusters:
             clusterTitle = cluster.title.encode('ascii', 'ignore')
-            #self.context.log.info("RubricPage - 1. render cluster '{0}' ...", clusterTitle)
             action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': rubricUrl, 'clusterTitle': clusterTitle})
             item = Item(cluster.title, action, isFolder=True)
             response.addItem(item)            
     
     def _renderCluster(self, cluster, response, apiToken):
         for teaser in cluster.teasers:
-            #self.context.log.info("RubricPage - 2. render cluster '{0}' ...", cluster.title)
             item = self._createItem(teaser, apiToken)
             if item is not None:
                 response.addItem(item)

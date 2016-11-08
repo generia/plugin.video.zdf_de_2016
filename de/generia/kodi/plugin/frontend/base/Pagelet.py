@@ -1,5 +1,7 @@
 import urllib
 
+from xbmcaddon import Addon
+
 class Log(object):
     def __init__(self):
         pass
@@ -90,11 +92,14 @@ class Pagelet(object):
          
     def init(self, context):
         self.context = context
+        self.addon = Addon()
 
     def service(self, request, response):
         pass
         
-
+    def _(self, id):
+        return self.addon.getLocalizedString(id)
+    
 class PageletFactory(object):
 
     def __init__(self):

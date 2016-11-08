@@ -14,4 +14,4 @@ class RubricsPage(ItemPage):
         navigation = NavigationResource(Constants.baseUrl)
         navigation.parse()
         for rubric in navigation.rubrics:
-            response.addFolder('Rubrik - ' + rubric.title, Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': rubric.url}))
+            response.addFolder(self._(32004) + ' - ' + rubric.title, Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': rubric.url}))

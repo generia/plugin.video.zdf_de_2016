@@ -21,13 +21,13 @@ class SearchPage(ItemPage):
         del query['apiToken']
         
         if 'q' not in query:
-            keyboard = xbmc.Keyboard('', 'Suche')
+            keyboard = xbmc.Keyboard('', self._(32005))
             keyboard.doModal()
             if keyboard.isConfirmed() and keyboard.getText():
                 text = keyboard.getText().replace(" ", "+")
                 query['q'] = text
             else:
-                response.sendInfo("Empty search string")
+                response.sendInfo(self._(32006))
                 return
 
         queryParams = urllib.urlencode(query)

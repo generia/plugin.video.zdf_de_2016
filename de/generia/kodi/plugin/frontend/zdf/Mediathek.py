@@ -41,7 +41,7 @@ class Mediathek(Pagelet):
         #response.addFolder('Soko Stuttgart', Action('RubricPage', {'apiToken': apiToken, 'rubricUrl':'/serien/soko-stuttgart'}))
 
         #response.addFolder('Suche - Soko', Action('SearchPage', {'apiToken': apiToken, 'q':'Soko', 'contentTypes':'episode'}))
-        response.addFolder('Suche - ganze Sendungen', Action('SearchPage', {'apiToken': apiToken, 'contentTypes':'episode'}))
-        response.addFolder('Suche - Volltext', Action('SearchPage', {'apiToken': apiToken}))
+        response.addFolder(self._(32001), Action('SearchPage', {'apiToken': apiToken, 'contentTypes':'episode'}))
+        response.addFolder(self._(32002), Action('SearchPage', {'apiToken': apiToken}))
 
-        response.addFolder('Rubriken', Action('RubricsPage', {'apiToken': apiToken}))
+        response.addFolder(self._(32003), Action('RubricsPage', {'apiToken': apiToken}))
