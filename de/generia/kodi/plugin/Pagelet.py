@@ -66,12 +66,13 @@ class Response(object):
         return url 
     
 class Item(object):
-    def __init__(self, title, action, image=None, text=None, genre=None, isFolder=False):
+    def __init__(self, title, action, image=None, text=None, genre=None, date=None, isFolder=False):
         self.title = title
         self.action = action
         self.image = image
         self.text = text
         self.genre = genre
+        self.date = date
         self.isFolder = isFolder
 
 class Action(object):

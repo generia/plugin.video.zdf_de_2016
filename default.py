@@ -30,10 +30,10 @@ class XbmcLog(Log):
         xbmc.log(msg, level=level)
 
     def debug(self, message, *args):
-        self._log(xbmc.LOGNOTICE, message, *args)
+        self._log(xbmc.LOGDEBUG, message, *args)
     
     def info(self, message, *args):
-        self._log(xbmc.LOGINFO, message, *args)
+        self._log(xbmc.LOGNOTICE, message, *args)
 
     def warn(self, message, *args):
         self._log(xbmc.LOGWARNING, message, *args)
@@ -53,17 +53,17 @@ class XbmcResponse(Response):
         if item is None:
             return
         title = item.title
-        if item.genre is not None:
+        if item.genre is not None and item.genre != "":
             title = '[' + item.genre + '] ' + title
-        #if item.action is not None and 'contentName' in item.action.params:
-        #    title += ' [' + item.action.params['contentName'] +']'
+        title = title.stip()
+
         li = xbmcgui.ListItem(title, item.text)
         li.setArt({'poster': item.image, 'banner': item.image, 'thumb': item.image, 'icon': item.image, 'fanart': item.image})
-        li.setInfo(type="Video", infoLabels={"Title": item.title})
+        li.setInfo(type="Video", infoLabels={"title": title, "sorttitle": item.title, 'date': item.date, 'genre': item.genre})
         li.setProperty('IsPlayable', 'false')
         url = self.encodeUrl(item.action)
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
-        self.context.log.info('{0} -> {1}',     item.isFolder, url)
+        self.context.log.info('{0} -> {1}', item.isFolder, url)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)
 
     def close(self):
@@ -96,6 +96,10 @@ for key, value in args.iteritems():
         
 log = XbmcLog('ZDF Mediathek 2016 [' + str(handle) + ']: ')
 log.debug('Plugin - baseUrl={0}, query={1}', baseUrl, sys.argv[2][0:])
+xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
+xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
+xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
+
 context = Context(log)
 factory = MediathekFactory()
 pagelet = factory.createPagelet(pageletId, params)

@@ -1,5 +1,3 @@
-from de.generia.kodi.plugin.web import JsonResource
-
 from de.generia.kodi.plugin.Constants import Constants
 from de.generia.kodi.plugin.zdf.api.ApiResource import ApiResource
 
@@ -12,13 +10,13 @@ class VideoContentResource(ApiResource):
     def parse(self):
         super(VideoContentResource, self).parse()
         
-        self.title = JsonResource.getValue(self.content, 'title') 
-        self.text = JsonResource.getValue(self.content, 'teasertext')
-        self.tvService = JsonResource.getValue(self.content, 'tvService')
+        self.title = self.content.get('title') 
+        self.text = self.content.get('teasertext')
+        self.tvService = self.content.get('tvService')
         
         if 'http://zdf.de/rels/category' in self.content:
             category = self.content['http://zdf.de/rels/category']
-            self.genre = JsonResource.getValue(category, 'title')
+            self.genre = category.get('title')
             
         if 'teaserImageRef' in self.content:
             teaserImageRef = self.content['teaserImageRef']

@@ -2,7 +2,7 @@
 import urllib
 import xbmc
 import xbmcplugin
-from de.generia.kodi.plugin.zdf.SearchPageResource import SearchPageResource       
+from de.generia.kodi.plugin.zdf.SearchResource import SearchResource       
 from de.generia.kodi.plugin.Constants import Constants
 
 from de.generia.kodi.plugin.Pagelet import Item        
@@ -32,7 +32,7 @@ class SearchPage(Pagelet):
         searchUrl = Constants.baseUrl + "/suche?" + queryParams
         
         self.context.log.debug("SearchPage - searching url: '{0}' ...", searchUrl)
-        searchPage = SearchPageResource(searchUrl)
+        searchPage = SearchResource(searchUrl)
         searchPage.parse()
         self.context.log.debug("SearchPage - found '{0}' results.", len(searchPage.teasers))
         if searchPage.moreUrl is not None:
@@ -50,13 +50,15 @@ class SearchPage(Pagelet):
         for tag in teaser.tags:
             genre += sep + tag
             sep = ' | '
+        title = teaser.title
+        if teaser.label is not None and teaser.label != "":
+            title = '[' + teaser.label + '] ' + title
+        title.strip()
+
         if teaser.contentName is not None and teaser.playable:
-            title = teaser.title
-            if teaser.label is not None:
-                title = '[' + teaser.label + '] ' + title
             action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName})
-            item = Item(teaser.title, action, teaser.image, teaser.text, genre)
         else:   
-            self.context.log.warn("SearchPage - can't find content-name for teaser-url '{0}' and teaser-title '{1}', skipping item ...", teaser.url, teaser.title)
-            #item = Item(teaser.title, None, teaser.image, teaser.text, genre)
+            action = Action(pagelet='RubrikPage', params={'apiToken': apiToken, 'rubrikUrl': teaser.url})
+            self.context.log.info("SearchPage - redirecting to rubric-url  '{0}' and teaser-title '{1}' ...", teaser.url, title)
+        item = Item(title, action, teaser.image, teaser.text, genre, teaser.date)
         return item

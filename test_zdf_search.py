@@ -4,7 +4,9 @@ import urllib2
 from bs4 import BeautifulSoup
 from re import search
 
-from de.generia.kodi.plugin.zdf.SearchPageResource import SearchPageResource        
+from de.generia.kodi.plugin.zdf.SearchResource import SearchResource        
+from de.generia.kodi.plugin.zdf.NavigationResource import NavigationResource        
+from de.generia.kodi.plugin.zdf.RubricResource import RubricResource        
 from de.generia.kodi.plugin.zdf.ConfigurationResource import ConfigurationResource
 from de.generia.kodi.plugin.zdf.api.VideoContentResource import VideoContentResource
         
@@ -53,12 +55,12 @@ query = {'q': "heute show"}
 queryParams = urllib.urlencode(query)
 searchUrl = baseUrl + "/suche?" + queryParams
 #searchUrl = "http://www.cloudev.de/"
-
 configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
+'''
 
-searchPage = SearchPageResource(searchUrl)
+searchPage = SearchResource(searchUrl)
 searchPage.parse()
 for teaser in searchPage.teasers:
     print "- " + str(teaser)
@@ -70,7 +72,18 @@ videoContent = VideoContentResource(videoContentUrl, configuration.apiToken)
 videoContent.parse()
 
 print "Video-Content '" + teaser.contentName + "' -> url: '" + videoContent.url + "'"
-    
+
+navigationResource = NavigationResource(baseUrl)
+navigationResource.parse()
+for rubric in navigationResource.rubrics:
+    print "Rubric: " + str(rubric)
+'''
+rubricResource = RubricResource(baseUrl + '/filme-serien')
+rubricResource.parse()
+for cluster in rubricResource.clusters:
+    print cluster
+    for teaser in cluster.teasers:
+        print teaser
 '''
 soup = getSoup(searchUrl)
 #print soup
