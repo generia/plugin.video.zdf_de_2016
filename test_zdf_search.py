@@ -2,13 +2,13 @@ import urllib
 import urllib2
 
 from bs4 import BeautifulSoup
-from re import search
 
-from de.generia.kodi.plugin.zdf.SearchResource import SearchResource        
-from de.generia.kodi.plugin.zdf.NavigationResource import NavigationResource        
-from de.generia.kodi.plugin.zdf.RubricResource import RubricResource        
-from de.generia.kodi.plugin.zdf.ConfigurationResource import ConfigurationResource
-from de.generia.kodi.plugin.zdf.api.VideoContentResource import VideoContentResource
+from de.generia.kodi.plugin.backend.zdf.SearchResource import SearchResource        
+from de.generia.kodi.plugin.backend.zdf.NavigationResource import NavigationResource        
+from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource        
+from de.generia.kodi.plugin.backend.zdf.ConfigurationResource import ConfigurationResource
+
+from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
         
 def getUrl(url):
     print "getUrl: " + url

@@ -1,17 +1,17 @@
 import sys
 import urlparse
+
 import xbmc
 import xbmcgui
 import xbmcplugin
 
+from de.generia.kodi.plugin.frontend.base.Pagelet import Log
+from de.generia.kodi.plugin.frontend.base.Pagelet import Context
+from de.generia.kodi.plugin.frontend.base.Pagelet import Request
+from de.generia.kodi.plugin.frontend.base.Pagelet import Response
+from de.generia.kodi.plugin.frontend.base.Pagelet import Action
 
-from de.generia.kodi.plugin.Pagelet import Log
-from de.generia.kodi.plugin.Pagelet import Context
-from de.generia.kodi.plugin.Pagelet import Request
-from de.generia.kodi.plugin.Pagelet import Response
-from de.generia.kodi.plugin.Pagelet import Action
-
-from de.generia.kodi.plugin.Mediathek import MediathekFactory
+from de.generia.kodi.plugin.frontend.zdf.Mediathek import MediathekFactory
 
 
 class XbmcLog(Log):
@@ -55,7 +55,7 @@ class XbmcResponse(Response):
         title = item.title
         if item.genre is not None and item.genre != "":
             title = '[' + item.genre + '] ' + title
-        title = title.stip()
+        title = title.strip()
 
         li = xbmcgui.ListItem(title, item.text)
         li.setArt({'poster': item.image, 'banner': item.image, 'thumb': item.image, 'icon': item.image, 'fanart': item.image})
