@@ -5,9 +5,10 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Action
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
+from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
 
-class RubricPage(Pagelet):
+class RubricPage(ItemPage):
 
     def service(self, request, response):
         apiToken = request.params['apiToken']
@@ -53,21 +54,4 @@ class RubricPage(Pagelet):
                 response.addItem(item)
             else:
                 self.context.log.warn("RubricPage - can't find content-name for teaser-url '{0}' and teaser-title '{1}', skipping item ...", teaser.url, teaser.title)
-            
-    def _createItem(self, teaser, apiToken):
-        item = None
-        genre = ''
-        sep = ''
-        for tag in teaser.tags:
-            genre += sep + tag
-            sep = ' | '
-        if teaser.contentName is not None and teaser.playable:
-            title = teaser.title
-            if teaser.label is not None:
-                title = '[' + teaser.label + '] ' + title
-            action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName})
-            #action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': '/comedy'})
-            item = Item(teaser.title, action, teaser.image, teaser.text, genre, teaser.date)
-    
-        return item
         

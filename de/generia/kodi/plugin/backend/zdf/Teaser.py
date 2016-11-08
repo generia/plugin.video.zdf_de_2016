@@ -5,9 +5,11 @@ def parseTeaserArticle(article):
         return None
     
     picture = article.find('picture')
-    source = picture.find('source', class_='m-16-9')
-    srcset = source['data-srcset']
-    src = srcset.split(' ')[0]
+    src = None
+    if picture is not None:
+        source = picture.find('source', class_='m-16-9')
+        srcset = source['data-srcset']
+        src = srcset.split(' ')[0]
     
     teaserLabel = article.find('div', class_='teaser-label')
     label = None
@@ -29,7 +31,11 @@ def parseTeaserArticle(article):
             tags.append(part.strip())
 
     a = teaserTitle.find('a', itemprop='url')
+    if a is None:
+        return None
     url = a['href'].strip()
+    if  url[0:1] != '/':
+        return None
     title = a.text.strip()
     
     # shorten title, if double with second tag

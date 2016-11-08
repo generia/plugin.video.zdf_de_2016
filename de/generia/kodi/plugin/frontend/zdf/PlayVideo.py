@@ -26,7 +26,6 @@ class PlayVideo(Pagelet):
                 self.context.log.debug("PlayVideo - downloading video-content-url '{0}' ...", videoContentUrl)
                 videoContent = VideoContentResource(videoContentUrl, Constants.apiBaseUrl, apiToken)
                 videoContent.parse()
-                #videoContent.url='https://zdfvodnone-vh.akamaihd.net/i/meta-files/zdf/smil/m3u8/300/16/04/160412_hjo.smil/master.m3u8'
                 
                 if videoContent.streamInfoUrl is None:
                     self.context.log.warn("PlayVideo - can't find stream-info-url in video-content '{0}' in content '{1}'", contentName, videoContent.content)
@@ -50,6 +49,7 @@ class PlayVideo(Pagelet):
                 
                 dialog.update(percent=90, message='Starting video player ...')
                 xbmc.Player().play(url, item)
+    
             finally:
                 dialog.close();
             

@@ -10,9 +10,10 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Action
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
+from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
 
-class SearchPage(Pagelet):
+class SearchPage(ItemPage):
 
     def service(self, request, response):
         apiToken = request.params['apiToken']
@@ -43,23 +44,3 @@ class SearchPage(Pagelet):
             item = self._createItem(teaser, apiToken)
             response.addItem(item)
             
-
-    def _createItem(self, teaser, apiToken):
-        item = None
-        genre = ''
-        sep = ''
-        for tag in teaser.tags:
-            genre += sep + tag
-            sep = ' | '
-        title = teaser.title
-        if teaser.label is not None and teaser.label != "":
-            title = '[' + teaser.label + '] ' + title
-        title.strip()
-
-        if teaser.contentName is not None and teaser.playable:
-            action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName})
-        else:   
-            action = Action(pagelet='RubrikPage', params={'apiToken': apiToken, 'rubrikUrl': teaser.url})
-            self.context.log.info("SearchPage - redirecting to rubric-url  '{0}' and teaser-title '{1}' ...", teaser.url, title)
-        item = Item(title, action, teaser.image, teaser.text, genre, teaser.date)
-        return item

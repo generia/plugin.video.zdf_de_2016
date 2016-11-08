@@ -1,5 +1,6 @@
 import sys
 import urlparse
+import datetime
 
 import xbmc
 import xbmcgui
@@ -52,20 +53,32 @@ class XbmcResponse(Response):
     def addItem(self, item):
         if item is None:
             return
+        infoLabels = {}
         title = item.title
+        if item.isPlayable:
+            title = '(>) ' + title
         if item.genre is not None and item.genre != "":
             title = '[' + item.genre + '] ' + title
+            infoLabels['genre'] = item.genre
         title = title.strip()
 
+        infoLabels['title'] = title
+        infoLabels['sorttitle'] = title
+
+        date = item.date
+        if date is not None and date != "":
+            infoLabels['date'] = date
+
         li = xbmcgui.ListItem(title, item.text)
-        li.setArt({'poster': item.image, 'banner': item.image, 'thumb': item.image, 'icon': item.image, 'fanart': item.image})
-        li.setInfo(type="Video", infoLabels={"title": title, "sorttitle": item.title, 'date': item.date, 'genre': item.genre})
+        if item.image is not None:
+            li.setArt({'poster': item.image, 'banner': item.image, 'thumb': item.image, 'icon': item.image, 'fanart': item.image})
+        li.setInfo(type="Video", infoLabels=infoLabels)
         li.setProperty('IsPlayable', 'false')
         url = self.encodeUrl(item.action)
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
         self.context.log.info('{0} -> {1}', item.isFolder, url)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)
-
+    
     def close(self):
         xbmcplugin.endOfDirectory(self.handle)
         
@@ -83,6 +96,11 @@ class XbmcResponse(Response):
         listItem = xbmcgui.ListItem()
         xbmcplugin.setResolvedUrl(self.handle, False, listItem)
 
+
+def _total_milliseconds(td):
+    return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**3)
+
+start = datetime.datetime.now()
 baseUrl = sys.argv[0]
 handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
@@ -95,7 +113,8 @@ for key, value in args.iteritems():
         params[key] = value[0]
         
 log = XbmcLog('ZDF Mediathek 2016 [' + str(handle) + ']: ')
-log.debug('Plugin - baseUrl={0}, query={1}', baseUrl, sys.argv[2][0:])
+log.info('Version: {0} {1}',  (sys.executable or sys.platform), sys.version)
+log.info('Plugin - executing url={0}{1} ...', baseUrl, sys.argv[2][0:])
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
@@ -109,3 +128,6 @@ response = XbmcResponse(context, baseUrl, handle)
 
 pagelet.service(request, response)
 response.close()
+stop = datetime.datetime.now()
+delta = stop - start
+log.info('Plugin - executing url={0}{1} ... done. [{2} ms]', baseUrl, sys.argv[2][0:], _total_milliseconds(delta))
