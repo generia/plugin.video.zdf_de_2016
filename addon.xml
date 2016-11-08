@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="0.0.2" provider-name="alex@generia.de">
+<addon id="plugin.video.zdf_de_2016" name="ZDF Mediathek 2016" version="0.0.3" provider-name="Generia">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
   </requires>
-  <extension point="xbmc.python.pluginsource" library="default.py">
+  <extension point="xbmc.python.pluginsource" library="addon.py">
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
@@ -20,9 +20,9 @@
     <platform>all</platform>
     <news></news>
     <assets>
-        <icon>icon-mm.png</icon>
-        <fanart></fanart>
-        <screenshot></screenshot>
+        <icon>icon.png</icon>
+        <fanart>fanart.png</fanart>
+        <screenshot>icon-mm.png</screenshot>
     </assets>
   </extension>
 </addon>

@@ -76,7 +76,7 @@ class XbmcResponse(Response):
         li.setProperty('IsPlayable', 'false')
         url = self.encodeUrl(item.action)
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
-        self.context.log.info('{0} -> {1}', item.isFolder, url)
+        self.context.log.debug('{0} -> {1}', item.isFolder, url)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)
     
     def close(self):

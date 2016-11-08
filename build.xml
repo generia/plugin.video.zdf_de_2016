@@ -1,5 +1,5 @@
 <project name="jc" basedir="." default="dist">
-	<property name="version" value="0.0.2"/>
+	<property name="version" value="0.0.3"/>
 	<property name="baseName" value="plugin.video.zdf_de_2016"/>
 	<property name="zipFile" value="${baseName}-${version}.zip"/>
 
@@ -12,8 +12,10 @@
 				<include name="LICENSE.txt"/>
 				<include name="bs4/**"/>
 				<include name="de/**"/>
-				<include name="default.py"/>
+				<include name="resources/**"/>
+				<include name="addon.py"/>
 				<include name="icon.png"/>
+				<include name="fanart.png"/>
 			</fileset>
 		</copy>
 		<zip destfile="dist/${zipFile}" basedir="dist" >
