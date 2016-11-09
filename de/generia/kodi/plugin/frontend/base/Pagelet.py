@@ -96,7 +96,8 @@ class Action(object):
 
 
 class Pagelet(object):
-
+    logPrefix = "[{}] - "
+    
     def __init__(self):
         pass
          
@@ -121,21 +122,22 @@ class Pagelet(object):
         self.info("Timer - parsing url='{}' ... done. [{} ms]", resource.url, log.stop(start))
 
     def debug(self, message, *args):
-        self.context.log.debug("{} - " + message, type(self).__name__, *args)
+        self.context.log.debug(self.logPrefix + message, type(self).__name__, *args)
         pass
     
     def info(self, message, *args):
-        self.context.log.info("{} - " + message, type(self).__name__, *args)
+        self.context.log.info(self.logPrefix + message, type(self).__name__, *args)
         pass
 
     def warn(self, message, *args):
-        self.context.log.warn("{} - " + message, type(self).__name__, *args)
+        self.context.log.warn(self.logPrefix + message, type(self).__name__, *args)
         pass
     
     def error(self, message, *args):
-        self.context.log.error("{} - " + message, type(self).__name__, *args)
+        self.context.log.error(self.logPrefix + message, type(self).__name__, *args)
         pass
-    
+
+
 class PageletFactory(object):
 
     def __init__(self):

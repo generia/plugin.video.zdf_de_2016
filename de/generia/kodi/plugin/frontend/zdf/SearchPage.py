@@ -33,12 +33,12 @@ class SearchPage(ItemPage):
         queryParams = urllib.urlencode(query)
         searchUrl = Constants.baseUrl + "/suche?" + queryParams
         
-        self.context.log.debug("SearchPage - searching url: '{}' ...", searchUrl)
+        self.debug("searching url: '{}' ...", searchUrl)
         searchPage = SearchResource(searchUrl)
         self._parse(searchPage)
-        self.context.log.debug("SearchPage - found '{}' results.", len(searchPage.teasers))
+        self.debug("found '{}' results.", len(searchPage.teasers))
         if searchPage.moreUrl is not None:
-            self.context.log.debug("SearchPage - load-more-url: '{}'.", searchPage.moreUrl)
+            self.debug("load-more-url: '{}'.", searchPage.moreUrl)
 
         for teaser in searchPage.teasers:
             item = self._createItem(teaser, apiToken)

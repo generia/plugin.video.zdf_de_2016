@@ -17,7 +17,7 @@ class RubricPage(ItemPage):
         if 'clusterTitle' in request.params:
             clusterTitle = request.params['clusterTitle']
 
-        self.context.log.info('Info: rubric-page: url={}', rubricUrl)
+        self.info('rubric-page: url={}', rubricUrl)
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl)
         self._parse(rubricResource)
@@ -28,7 +28,7 @@ class RubricPage(ItemPage):
             if cluster is not None:
                 self._renderCluster(cluster, response, apiToken)
             else:
-                self.context.log.warn("RubricPage - can't find cluster-title '{}' in rubric-url '{}'", clusterTitle, rubricUrl)
+                self.warn("can't find cluster-title '{}' in rubric-url '{}'", clusterTitle, rubricUrl)
         else:
             self._renderClusters(clusters, response, apiToken, rubricUrl)
             
@@ -51,5 +51,5 @@ class RubricPage(ItemPage):
             if item is not None:
                 response.addItem(item)
             else:
-                self.context.log.warn("RubricPage - can't find content-name for teaser-url '{}' and teaser-title '{}', skipping item ...", teaser.url, teaser.title)
+                self.warn("can't find content-name for teaser-url '{}' and teaser-title '{}', skipping item ...", teaser.url, teaser.title)
         

@@ -29,7 +29,7 @@ class ItemPage(Pagelet):
             isFolder = False
         else:   
             action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': teaser.url})
-            self.context.log.info("ItemPage - redirecting to rubric-url  '{}' and teaser-title '{}' ...", teaser.url, title)
+            self.info("redirecting to rubric-url  '{}' and teaser-title '{}' ...", teaser.url, title)
             isFolder = True
             #return None
         item = Item(title, action, teaser.image, teaser.text, genre, teaser.date, isFolder, teaser.playable)

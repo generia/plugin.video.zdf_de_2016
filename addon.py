@@ -91,7 +91,7 @@ class XbmcResponse(Response):
         li.setProperty('IsPlayable', 'false')
         url = self.encodeUrl(item.action)
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
-        self.context.log.debug('{} -> {}', item.isFolder, url)
+        self.context.log.debug('[Response] - {} -> {}', item.isFolder, url)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)
     
     def close(self):
@@ -107,7 +107,7 @@ class XbmcResponse(Response):
         dialog = xbmcgui.Dialog()
         dialog.notification(caption, message, level)
         url = self.encodeUrl(action)
-        self.context.log.info("Response - send{} '{}', redirecting to '{}'", caption, message, url)
+        self.context.log.info("[Response] - send{} '{}', redirecting to '{}'", caption, message, url)
         listItem = xbmcgui.ListItem()
         xbmcplugin.setResolvedUrl(self.handle, False, listItem)
 
@@ -124,8 +124,8 @@ for key, value in args.iteritems():
         params[key] = value[0]
         
 log = XbmcLog('ZDF Mediathek 2016 [' + str(handle) + ']: ')
-log.info('Python-Version: {} {}',  (sys.executable or sys.platform), sys.version)
-log.info('Plugin - executing url={}{} ...', baseUrl, sys.argv[2][0:])
+log.info('[Plugin] - Python-Version: {} {}',  (sys.executable or sys.platform), sys.version)
+log.info('[Plugin] - executing url={}{} ...', baseUrl, sys.argv[2][0:])
 start = log.start()
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
@@ -141,4 +141,4 @@ response = XbmcResponse(context, baseUrl, handle)
 pagelet.service(request, response)
 response.close()
 
-log.info('Plugin - executing url={}{} ... done. [{} ms]', baseUrl, sys.argv[2][0:], log.stop(start))
+log.info('[Plugin] - executing url={}{} ... done. [{} ms]', baseUrl, sys.argv[2][0:], log.stop(start))
