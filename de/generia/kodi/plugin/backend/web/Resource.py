@@ -9,10 +9,16 @@ class Resource(object):
         self.accept = accept
         
     def parse(self):
+        log = self.log
+        if log is not None:
+            log.info("{} - Timer - loading url='{}' ...", type(self).__name__, self.url)
+            start = log.start()
         self.content = self._getUrl();
+        if log is not None:
+            log.info("{} - Timer - loading url='{}' ... done. [{} ms]", type(self).__name__, self.url, log.stop(start))
     
     def _getUrl(self):
-        print "_getUrl: " + self.url
+        #print "_getUrl: " + self.url
         request = self._createRequest()
         # check, if ssl has certificate verification by default and turn it off
         if '_create_unverified_context' in dir(ssl):

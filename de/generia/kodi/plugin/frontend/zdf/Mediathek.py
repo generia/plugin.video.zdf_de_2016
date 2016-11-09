@@ -34,7 +34,7 @@ class Mediathek(Pagelet):
 
     def service(self, request, response):
         configuration = ConfigurationResource(Constants.configUrl)
-        configuration.parse()
+        self._parse(configuration)
         apiToken = configuration.apiToken
 
         #response.addItem(Item(title='Direct Stuttgart', isFolder=False, isPlayable=True, action=Action(url='https://zdfvodnone-vh.akamaihd.net/i/meta-files/zdf/smil/m3u8/300/16/09/160908_das_versprechen_ps_sok8/2/160908_das_versprechen_ps_sok8.smil/master.m3u8')))

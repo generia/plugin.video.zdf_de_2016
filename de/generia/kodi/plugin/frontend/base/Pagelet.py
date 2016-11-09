@@ -1,4 +1,5 @@
 import urllib
+import datetime
 
 from xbmcaddon import Addon
 
@@ -6,19 +7,28 @@ class Log(object):
     def __init__(self):
         pass
     
-    def debug(self, message):
+    def debug(self, message, *args):
         pass
     
-    def info(self, message):
+    def info(self, message, *args):
         pass
 
-    def warn(self, message):
+    def warn(self, message, *args):
         pass
     
-    def error(self, message):
+    def error(self, message, *args):
         pass
     
-    
+    def start(self):
+        return datetime.datetime.now()
+
+    def stop(self, start):
+        return self._total_milliseconds(datetime.datetime.now() - start)
+
+    def _total_milliseconds(self, td):
+        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**3)
+
+
 class Context(object):
     def __init__(self, log):
         self.log = log
@@ -93,12 +103,38 @@ class Pagelet(object):
     def init(self, context):
         self.context = context
         self.addon = Addon()
+        self.log = context.log
 
     def service(self, request, response):
         pass
         
     def _(self, id):
         return self.addon.getLocalizedString(id)
+    
+    def _parse(self, resource):
+        log = self.context.log
+        self.info("Timer - parsing url='{}' ...", resource.url)
+        start = log.start()
+        resource.log = log
+        resource.parse()
+        resource.log = None
+        self.info("Timer - parsing url='{}' ... done. [{} ms]", resource.url, log.stop(start))
+
+    def debug(self, message, *args):
+        self.context.log.debug("{} - " + message, type(self).__name__, *args)
+        pass
+    
+    def info(self, message, *args):
+        self.context.log.info("{} - " + message, type(self).__name__, *args)
+        pass
+
+    def warn(self, message, *args):
+        self.context.log.warn("{} - " + message, type(self).__name__, *args)
+        pass
+    
+    def error(self, message, *args):
+        self.context.log.error("{} - " + message, type(self).__name__, *args)
+        pass
     
 class PageletFactory(object):
 
@@ -107,4 +143,3 @@ class PageletFactory(object):
                  
     def createPagelet(self, pageletId, params):
         pass
-        
