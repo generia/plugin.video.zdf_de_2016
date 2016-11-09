@@ -9,7 +9,9 @@ class Resource(object):
         self.accept = accept
         
     def parse(self):
-        log = self.log
+        log = None
+        if hasattr(self, 'log'):
+            log = self.log
         if log is not None:
             log.info("[{}] - Timer - loading url='{}' ...", type(self).__name__, self.url)
             start = log.start()
