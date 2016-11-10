@@ -39,7 +39,7 @@ class XbmcLog(Log):
         for arg in args:
             part = arg
             if isinstance(arg, basestring):
-                part = arg.encode('ascii', 'ignore')
+                part = arg # arg.encode('ascii', 'ignore')
             parts.append(part)
         formatMessage = self._getFormatMessage(message)
         msg = self.prefix + formatMessage.format(*parts)
@@ -70,15 +70,10 @@ class XbmcResponse(Response):
             return
         infoLabels = {}
         title = item.title
-        if item.isPlayable:
-            title = '(>) ' + title
-        if item.genre is not None and item.genre != "":
-            title = '[' + item.genre + '] ' + title
-            infoLabels['genre'] = item.genre
-        title = title.strip()
 
         infoLabels['title'] = title
         infoLabels['sorttitle'] = title
+        infoLabels['genre'] = item.genre
 
         date = item.date
         if date is not None and date != "":
@@ -91,7 +86,7 @@ class XbmcResponse(Response):
         li.setProperty('IsPlayable', 'false')
         url = self.encodeUrl(item.action)
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
-        self.context.log.debug('[Response] - {} -> {}', item.isFolder, url)
+        self.context.log.info("[Response] - {} -> {}, title='{}' date='{}'", item.isFolder, url, title, date)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)
     
     def close(self):

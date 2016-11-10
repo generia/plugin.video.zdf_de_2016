@@ -1,5 +1,9 @@
 from datetime import datetime
 
+from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
+from de.generia.kodi.plugin.backend.zdf.Regex import getTag
+from de.generia.kodi.plugin.backend.zdf.Regex import compile
+
 def parseTeaserArticle(article):
     if 'm-hidden' in article.get('class'):
         return None
@@ -60,7 +64,10 @@ def parseTeaserArticle(article):
     if airing is not None:
         date = airing.text.strip()
 
-    return Teaser(title, text, src, url, date, tags, label, type, playable)
+    teaser = Teaser()
+    teaser.init(title, text, src, url, date, tags, label, type, playable)
+    return teaser
+
 
 def _getIconType(iconClass):
     for c in iconClass:
@@ -70,6 +77,16 @@ def _getIconType(iconClass):
                 return None
             return c[i+1:]
     return None
+
+teaserPattern = getTagPattern('article', 'b-content-teaser-item')
+sourcePattern = compile('<source\s*class="m-16-9"[^>]*data-srcset="([^"]*)"')
+labelPattern = getTagPattern('div', 'teaser-label')
+iconPattern = compile('<span\s*class="icon-[0-9]*_([^ ]*) icon">')
+catPattern = compile('<span class="teaser-cat"[^>]*>([^<]*)</span>')
+aPattern = compile('<a href="([^"]*)"[^>]*>')
+titleIconPattern = compile('<span\s*class="title-icon icon-[0-9]*_([^"]*)">')
+textPattern = compile('<p class="teaser-text"[^>]*>([^<]*)</p>')
+datePattern = compile('<dd class="video-airing"[^>]*>([^<]*)</dd>')
 
     
 def compareTeasers(t1, t2):
@@ -101,8 +118,21 @@ def compareTeasers(t1, t2):
     return 0
 
 class Teaser(object):
+    title = None
+    text = None
+    image = None
+    url = None
+    date = None
+    tags = None
+    label = None
+    type = None
+    playable = False
+    contentName = None
     
-    def __init__(self, title, text, image, url, date, tags, label, type, playable):
+    def __init__(self):
+        pass
+               
+    def init(self, title, text, image, url, date, tags, label, type, playable):
         self.title = title
         self.text = text
         self.image = image
@@ -113,12 +143,99 @@ class Teaser(object):
         self.type = type
         self.playable = playable
         self.contentName = None
-        i = url.rfind('.')
-        if i != -1:
-            j = url.rfind('/')
-            if j != -1:
-                self.contentName = url[j+1:i]
-                
+        if url is not None:
+            i = url.rfind('.')
+            if i != -1:
+                j = url.rfind('/')
+                if j != -1:
+                    self.contentName = url[j+1:i]
+                    
+    def valid(self):
+        return self.url is not None and self.title is not None
+     
     def __str__(self):
         return "<Teaser '%s' url='%s'>" % (self.title, self.url)
         
+
+    def parse(self, string, pos=0, teaserMatch=None):
+        if teaserMatch is None:
+            teaserMatch = teaserPattern.search(string, pos)
+        if teaserMatch is None:
+            return -1
+        class_ = teaserMatch.group(1)
+        if class_.find('m-hidden') != -1:
+            return -1
+        
+        article = getTag('article', string, teaserMatch)
+        endPos = pos + len(article)
+        
+        sourceMatch = sourcePattern.search(article)
+        src = None
+        if sourceMatch is not None:
+            srcset = sourceMatch.group(1)
+            src = srcset.split(' ')[0]
+            pos = sourceMatch.end(0)
+        
+        labelMatch = labelPattern.search(article, pos)
+        label = None
+        type = None
+        if labelMatch is not None:        
+            labelTags = getTag('div', article, labelMatch)
+            iconMatch = iconPattern.search(labelTags)
+            if iconMatch is not None:    
+                type = iconMatch.group(1)
+            i = labelTags.find('</span>') + len('</span>')
+            j = labelTags.rfind('</div>')
+            pos = j + len('</div>') 
+            label = labelTags[i:j]
+            label = label.replace('<strong>', '')
+            label = label.replace('</strong>', '')
+            label = label.strip()
+            
+        catMatch = catPattern.search(article, pos)
+        genre = None
+        category = None
+        tags = []
+        if catMatch is not None:
+            parts = catMatch.group(1).strip().split('|')
+            if len(parts) > 0:
+                genre = parts[0].strip()
+                tags.append(genre)
+            if len(parts) > 1:
+                category = parts[1].strip()
+                tags.append(category) 
+            pos = catMatch.end(0)
+            
+        aMatch = aPattern.search(article, pos)
+        title = None
+        url = None
+        playable = False
+        if aMatch is not None:
+            url = aMatch.group(1).strip()        
+            pos = aMatch.end(0)
+            i = pos
+            j = article.find('</a>', i)
+            iconMatch = titleIconPattern.search(article, pos)
+            if iconMatch is not None:    
+                playable =  iconMatch.group(1) == 'play'
+                i = article.find('</span>', pos) + len('</span>')
+            title = article[i:j]
+            title = title.replace('<strong>', '')
+            title = title.replace('</strong>', '')
+            title = title.strip()
+            pos = j + len('</a>') 
+    
+        textMatch = textPattern.search(article, pos)
+        text = None
+        if textMatch is not None:
+            text = textMatch.group(1).strip()
+            pos = textMatch.end(0)
+            
+        dateMatch = datePattern.search(article, pos)
+        date = None
+        if dateMatch is not None:
+            date = dateMatch.group(1).strip()
+            pos = dateMatch.end(0)
+    
+        self.init(title, text, src, url, date, tags, label, type, playable)
+        return endPos

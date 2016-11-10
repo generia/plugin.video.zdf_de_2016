@@ -22,7 +22,16 @@ class ItemPage(Pagelet):
                 label = teaser.type.capitalize() + ": " + label
             title = '[' + label + '] ' + title
         title.strip()
+        
+        if teaser.playable:
+            title = '(>) ' + title
+        if genre is not None and genre != "":
+            title = '[' + genre + '] ' + title
+        title = title.strip()
 
+        if teaser.date is not None:
+            title = teaser.date + " " + title
+           
         isFolder = False
         if teaser.contentName is not None and teaser.playable:
             action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName})

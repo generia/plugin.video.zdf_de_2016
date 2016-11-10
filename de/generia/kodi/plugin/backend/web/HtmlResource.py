@@ -9,4 +9,4 @@ class HtmlResource(Resource):
         
     def parse(self):
         super(HtmlResource, self).parse()
-        self.content = BeautifulSoup(self.content, 'html.parser')
+        #self.content = BeautifulSoup(self.content, 'html.parser')

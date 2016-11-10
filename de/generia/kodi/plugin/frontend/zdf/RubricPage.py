@@ -34,13 +34,14 @@ class RubricPage(ItemPage):
             
     def _getCluster(self, clusters, clusterTitle):
         for cluster in clusters:
-            if cluster.title.encode('ascii', 'ignore') == clusterTitle:
+            if cluster.title == clusterTitle:
+            #if cluster.title.encode('ascii', 'ignore') == clusterTitle:
                 return cluster
         return None
         
     def _renderClusters(self, clusters, response, apiToken, rubricUrl):
         for cluster in clusters:
-            clusterTitle = cluster.title.encode('ascii', 'ignore')
+            clusterTitle = cluster.title #.encode('ascii', 'ignore')
             action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': rubricUrl, 'clusterTitle': clusterTitle})
             item = Item(cluster.title, action, isFolder=True)
             response.addItem(item)            

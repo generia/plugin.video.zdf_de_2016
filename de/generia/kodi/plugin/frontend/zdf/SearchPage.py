@@ -12,7 +12,6 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
-
 class SearchPage(ItemPage):
 
     def service(self, request, response):
@@ -21,10 +20,11 @@ class SearchPage(ItemPage):
         del query['apiToken']
         
         if 'q' not in query:
-            keyboard = xbmc.Keyboard('', self._(32005))
-            keyboard.doModal()
-            if keyboard.isConfirmed() and keyboard.getText():
-                text = keyboard.getText().replace(" ", "+")
+            self.info("Timer - getting search-string from keyboard ...")
+            start = self.context.log.start()
+            text = self._getKeyboardInput()
+            self.info("Timer - getting search-string from keyboard ... done. [{} ms]", self.context.log.stop(start))
+            if text is not None:
                 query['q'] = text
             else:
                 response.sendInfo(self._(32006))
@@ -40,7 +40,18 @@ class SearchPage(ItemPage):
         if searchPage.moreUrl is not None:
             self.debug("load-more-url: '{}'.", searchPage.moreUrl)
 
+        self.info("Timer - creating list items  ...")
+        start = self.context.log.start()
         for teaser in searchPage.teasers:
             item = self._createItem(teaser, apiToken)
             response.addItem(item)
-            
+        self.info("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
+
+    def _getKeyboardInput(self):
+        keyboard = xbmc.Keyboard('', self._(32005))
+        keyboard.doModal()
+        text = None
+        if keyboard.isConfirmed() and keyboard.getText():
+            text = keyboard.getText().replace(" ", "+")
+        return text
+
