@@ -151,7 +151,7 @@ class Teaser(object):
                     self.contentName = url[j+1:i]
                     
     def valid(self):
-        return self.url is not None and self.title is not None
+        return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
         return "<Teaser '%s' url='%s'>" % (self.title, self.url)
@@ -167,7 +167,7 @@ class Teaser(object):
             return -1
         
         article = getTag('article', string, teaserMatch)
-        endPos = pos + len(article)
+        endPos = teaserMatch.start(0) + len(article)
         
         sourceMatch = sourcePattern.search(article)
         src = None
