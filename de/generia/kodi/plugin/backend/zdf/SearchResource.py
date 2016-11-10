@@ -10,7 +10,6 @@ class SearchResource(HtmlResource):
 
     def __init__(self, url):
         super(SearchResource, self).__init__(url)
-        self._tags = []
             
     def parse(self):
         super(SearchResource, self).parse()

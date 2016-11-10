@@ -4,80 +4,6 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
 from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
-def parseTeaserArticle(article):
-    if 'm-hidden' in article.get('class'):
-        return None
-    
-    picture = article.find('picture')
-    src = None
-    if picture is not None:
-        source = picture.find('source', class_='m-16-9')
-        srcset = source['data-srcset']
-        src = srcset.split(' ')[0]
-    
-    teaserLabel = article.find('div', class_='teaser-label')
-    label = None
-    type = None
-    if teaserLabel is not None:            
-        label = teaserLabel.text.strip()
-        icon = teaserLabel.find('span', class_='icon')
-        type = _getIconType(icon['class']) 
-
-    teaserTitle = article.find('h3', class_='teaser-title')
-    if teaserTitle is None:
-        return None
-    
-    genre = teaserTitle.find('span', class_='teaser-cat')
-    tags = []
-    if genre is not None:
-        parts = genre.text.split('|')
-        for part in parts:
-            tags.append(part.strip())
-
-    a = teaserTitle.find('a', itemprop='url')
-    if a is None:
-        return None
-    url = a['href'].strip()
-    if  url[0:1] != '/':
-        return None
-    title = a.text.strip()
-    
-    # shorten title, if double with second tag
-    if len(tags) > 1:
-        tag = tags[1]
-        if tag == title[0:len(tag)]:
-            title = title[len(tag):].strip()
-    
-    icon = a.find('span', class_='title-icon')
-    playable = False
-    if icon is not None:
-        urlType = _getIconType(icon['class']) 
-        playable = urlType != None and urlType == 'play'
-    
-    teaserText = article.find('p', class_='teaser-text')
-    text = None
-    if teaserText is not None and teaserText.string is not None:
-        text = teaserText.string.strip()
-    
-    airing = article.find('dd', class_='video-airing')
-    date = None
-    if airing is not None:
-        date = airing.text.strip()
-
-    teaser = Teaser()
-    teaser.init(title, text, src, url, date, tags, label, type, playable)
-    return teaser
-
-
-def _getIconType(iconClass):
-    for c in iconClass:
-        if c.startswith('icon-'):
-            i = c.rfind('_')
-            if i == -1:
-                return None
-            return c[i+1:]
-    return None
-
 teaserPattern = getTagPattern('article', 'b-content-teaser-item')
 sourcePattern = compile('<source\s*class="m-16-9"[^>]*data-srcset="([^"]*)"')
 labelPattern = getTagPattern('div', 'teaser-label')
@@ -123,7 +49,8 @@ class Teaser(object):
     image = None
     url = None
     date = None
-    tags = None
+    genre = None
+    category = None
     label = None
     type = None
     playable = False
@@ -132,13 +59,14 @@ class Teaser(object):
     def __init__(self):
         pass
                
-    def init(self, title, text, image, url, date, tags, label, type, playable):
+    def init(self, title, text, image, url, date, genre, category, label, type, playable):
         self.title = title
         self.text = text
         self.image = image
         self.url = url
         self.date = date
-        self.tags = tags
+        self.genre = genre
+        self.category = category
         self.label = label
         self.type = type
         self.playable = playable
@@ -195,15 +123,13 @@ class Teaser(object):
         catMatch = catPattern.search(article, pos)
         genre = None
         category = None
-        tags = []
+
         if catMatch is not None:
             parts = catMatch.group(1).strip().split('|')
             if len(parts) > 0:
                 genre = parts[0].strip()
-                tags.append(genre)
             if len(parts) > 1:
                 category = parts[1].strip()
-                tags.append(category) 
             pos = catMatch.end(0)
             
         aMatch = aPattern.search(article, pos)
@@ -237,5 +163,5 @@ class Teaser(object):
             date = dateMatch.group(1).strip()
             pos = dateMatch.end(0)
     
-        self.init(title, text, src, url, date, tags, label, type, playable)
+        self.init(title, text, src, url, date, genre, category, label, type, playable)
         return endPos

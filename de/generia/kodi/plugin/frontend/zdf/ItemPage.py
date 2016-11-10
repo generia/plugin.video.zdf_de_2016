@@ -12,9 +12,11 @@ class ItemPage(Pagelet):
         item = None
         genre = ''
         sep = ''
-        for tag in teaser.tags:
-            genre += sep + tag
+        if teaser.genre:
+            genre += sep + teaser.genre
             sep = ' | '
+        if teaser.category:
+            genre += sep + teaser.category
         title = teaser.title
         if teaser.label is not None and teaser.label != "":
             label = teaser.label

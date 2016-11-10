@@ -19,44 +19,6 @@ def getUrl(url):
     link = response.read()
     response.close()
     return link
-
-def getTagClassPattern(tag, class_):
-    return re.compile('<' + tag + '\s*class=[^"]*' + class_ + '[^"]*"\s*>', re.DOTALL)
-
-def getTag(tag, class_, string):
-    pattern = getTagClassPattern(tag, class_)
-    match = pattern.search(string)
-    if match is None:
-        return None
-
-    i = match.start(0)
-    endTag = '</' + tag + '>'
-    j = string.find(endTag, i) + len(endTag)
-    result = string[i:j]
-    print result
-
-def parseContentTeaserItemRE(article):
-    picture = article.find('picture')
-    source = picture.find('source', class_='m-16-9')
-    srcset = source['data-srcset']
-    src = srcset.split(' ')[0]
-    
-    teaserTitle = article.find('h3', class_='teaser-title')
-    genre = teaserTitle.find(itemprop='genre')
-    tags = []
-    if genre is not None:
-        parts = genre.text.split('|')
-        for part in parts:
-            tags.append(part.strip())
-
-    a = teaserTitle.find('a', itemprop='url')
-    url = a['href'].strip()
-    title = a.text.strip()
-    teaserText = article.find('p', class_='teaser-text')
-    text = teaserText.string.strip()
-    
-    date = article.find('dd', class_='video-airing').text.strip()
-    print "Teaser: '%s'\n- url='%s'\n- img='%s'\n- date: %s\n- tags: %s\n- description: '%s'\n" % (title, url, src, date, tags, text)
     
 # https://www.zdf.de/suche?q=heute-show&from=&to=&sender=alle+Sender&attrs=
 
