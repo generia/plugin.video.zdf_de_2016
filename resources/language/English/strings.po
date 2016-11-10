@@ -67,3 +67,15 @@ msgstr ""
 msgctxt "#32013"
 msgid "No results found for last search."
 msgstr ""
+
+msgctxt "#32014"
+msgid "General"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Merge category and title"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Item pattern"
+msgstr ""

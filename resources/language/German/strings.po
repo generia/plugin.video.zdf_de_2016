@@ -85,3 +85,15 @@ msgstr "Stream-info-url fehlt im Video-Content"
 msgctxt "#32013"
 msgid "No results found for last search."
 msgstr "Die Suche lieferte keine Treffer."
+
+msgctxt "#32014"
+msgid "General"
+msgstr "Allgemein"
+
+msgctxt "#32015"
+msgid "Merge category and title"
+msgstr "Verbinde Kategory und Titel"
+
+msgctxt "#32016"
+msgid "Item pattern"
+msgstr "Listeneintrag Template"

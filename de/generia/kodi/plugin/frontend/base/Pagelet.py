@@ -30,8 +30,9 @@ class Log(object):
 
 
 class Context(object):
-    def __init__(self, log):
+    def __init__(self, log, settings):
         self.log = log
+        self.settings = settings
     
     def getLog(self):
         return self.log
@@ -105,6 +106,7 @@ class Pagelet(object):
         self.context = context
         self.addon = Addon()
         self.log = context.log
+        self.settings = context.settings
 
     def service(self, request, response):
         pass

@@ -107,6 +107,12 @@ class XbmcResponse(Response):
         xbmcplugin.setResolvedUrl(self.handle, False, listItem)
 
 
+class Settings(object):
+    def __init__(self, handle):
+        self.mergeCategoryAndTitle = xbmcplugin.getSetting(handle, 'mergeCategoryAndTitle') == 'true'
+        self.itemPattern = xbmcplugin.getSetting(handle, 'itemPattern')
+
+
 baseUrl = sys.argv[0]
 handle = int(sys.argv[1])
 args = urlparse.parse_qs(sys.argv[2][1:])
@@ -126,7 +132,7 @@ xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
 
-context = Context(log)
+context = Context(log, Settings(handle))
 factory = MediathekFactory()
 pagelet = factory.createPagelet(pageletId, params)
 pagelet.init(context)

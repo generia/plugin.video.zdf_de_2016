@@ -90,7 +90,7 @@ class Teaser(object):
         if teaserMatch is None:
             teaserMatch = teaserPattern.search(string, pos)
         if teaserMatch is None:
-            return pos
+            return -1
         class_ = teaserMatch.group(1)
         
         article = getTag('article', string, teaserMatch)
