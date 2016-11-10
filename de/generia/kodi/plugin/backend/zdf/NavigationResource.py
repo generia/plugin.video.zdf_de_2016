@@ -41,30 +41,3 @@ class NavigationResource(HtmlResource):
             self.rubrics.append(rubric)
             pos = dropdownLinksMatch.end(0)
             dropdownLinksMatch = dropdownLinksPattern.search(self.content, pos)
-            
-    def parseSoup(self):
-        super(NavigationResource, self).parse()
-        topBar = self.content.find('nav', class_='top-bar-section')
-        leftNav = topBar.find('ul', class_='left-nav')
-        dropdownList = leftNav.find('ul', class_='dropdown-list')
-        dropdownLinks = dropdownList.find_all('a', class_='dropdown-link')
-
-        self.rubrics = []
-        for dropdownLink in dropdownLinks:
-            rubric = self._parseDropdownLink(dropdownLink)
-            if rubric is not None:
-                self.rubrics.append(rubric)
-
-    def _parseDropdownLink(self, dropdownLink):
-        title = dropdownLink.get('data-title');
-        if title is not None:
-            title = title.strip()
-        else:
-            return None
-        url = dropdownLink.get('href');
-        if url is not None:
-            url = url.strip()
-        else:
-            return None
-
-        return Rubric(title, url)

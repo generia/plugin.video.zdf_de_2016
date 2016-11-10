@@ -5,8 +5,6 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
-from de.generia.kodi.plugin.backend.zdf.Teaser import parseTeaserArticle
-from de.generia.kodi.plugin.backend.zdf.Teaser import compareTeasers
 
 sectionPattern = getTagPattern('section', 'b-content-teaser-list')
 sectionTitlePattern = compile('<h2 class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
@@ -80,63 +78,4 @@ class RubricResource(HtmlResource):
                 teasers.append(teaser)
             
         #teasers = sorted(teasers, cmp=compareTeasers, reverse=True)
-        return Cluster(title, teasers)
-        
-    def parseSoup(self):
-        super(RubricResource, self).parse()
-
-        
-        self.clusters = []
-        clusterSections = self.content.find_all('section', class_='b-content-teaser-list')
-        for clusterSection in clusterSections:
-            cluster = self._parseClusterSectionSoup(clusterSection)
-            if cluster is not None:
-                self.clusters.append(cluster)        
-        
-        clusterArticles = self.content.find_all('article', class_='b-cluster')
-        for clusterArticle in clusterArticles:
-            cluster = self._parseClusterArticle(clusterArticle)
-            if cluster is not None:
-                self.clusters.append(cluster)
-
-    def _parseClusterSectionSoup(self, clusterSection):
-
-        h2 = clusterSection.find('h2', class_='title');
-        if h2 is None:
-            return None
-        title = h2.text
-        if title is not None:
-            title = title.strip()
-        else:
-            return None
-        
-        teasers = []
-        teaserArticles = clusterSection.find_all('article', class_='b-content-teaser-item')
-        for teaserArticle in teaserArticles:
-            teaser = parseTeaserArticle(teaserArticle)
-            if teaser is not None:
-                teasers.append(teaser)
-            
-        teasers = sorted(teasers, cmp=compareTeasers, reverse=True)
-        return Cluster(title, teasers)
-
-    
-    def _parseClusterArticle(self, clusterArticle):
-        h2 = clusterArticle.find('h2', class_='cluster-title');
-        if h2 is None:
-            return None
-        title = h2.text
-        if title is not None:
-            title = title.strip()
-        else:
-            return None
-        
-        teasers = []
-        teaserArticles = clusterArticle.find_all('article', class_='b-cluster-teaser')
-        for teaserArticle in teaserArticles:
-            teaser = parseTeaserArticle(teaserArticle)
-            if teaser is not None:
-                teasers.append(teaser)
-            
-        teasers = sorted(teasers, cmp=compareTeasers, reverse=True)
         return Cluster(title, teasers)

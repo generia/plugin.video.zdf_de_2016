@@ -2,10 +2,6 @@ import urllib
 import urllib2
 import re
 
-from bs4 import BeautifulSoup
-from bs4.diagnose import diagnose
-from bs4 import SoupStrainer
-
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
 from de.generia.kodi.plugin.backend.zdf.SearchResource import SearchResource        
@@ -23,34 +19,6 @@ def getUrl(url):
     link = response.read()
     response.close()
     return link
-
-def getSoup(url):
-    html = getUrl(url)
-    return BeautifulSoup(html, 'html.parser')
-
-def parseContentTeaserItem(article):
-    picture = article.find('picture')
-    source = picture.find('source', class_='m-16-9')
-    srcset = source['data-srcset']
-    src = srcset.split(' ')[0]
-    
-    teaserTitle = article.find('h3', class_='teaser-title')
-    genre = teaserTitle.find(itemprop='genre')
-    tags = []
-    if genre is not None:
-        parts = genre.text.split('|')
-        for part in parts:
-            tags.append(part.strip())
-
-    a = teaserTitle.find('a', itemprop='url')
-    url = a['href'].strip()
-    title = a.text.strip()
-    teaserText = article.find('p', class_='teaser-text')
-    text = teaserText.string.strip()
-    
-    date = article.find('dd', class_='video-airing').text.strip()
-    print "Teaser: '%s'\n- url='%s'\n- img='%s'\n- date: %s\n- tags: %s\n- description: '%s'\n" % (title, url, src, date, tags, text)
-    
 
 def getTagClassPattern(tag, class_):
     return re.compile('<' + tag + '\s*class=[^"]*' + class_ + '[^"]*"\s*>', re.DOTALL)
@@ -133,7 +101,6 @@ for cluster in rubricResource.clusters:
         print teaser
     
 '''
-#soup = getSoup(searchUrl)
 html = getUrl(searchUrl)
 
 #teaser = getTag('article', 'b-content-teaser-item')
@@ -156,17 +123,4 @@ if match is not None:
     j = html.find('</article>', i) + len('</article>')
     teaser = html[i:j]
     print teaser
-#diagnose(html)
-'''
-'''
-articlesStrainer = SoupStrainer("article")
-#articlesStrainer = SoupStrainer("article", class_="b-content-teaser-item")
-
-soup = BeautifulSoup(html, 'html.parser', parse_only=articlesStrainer)
-print soup.prettify()
-
-articles = soup.find_all('article', class_='b-content-teaser-item')
-print "articles: ", len(articles)
-for article in articles:
-    parseContentTeaserItem(article)
 '''

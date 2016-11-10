@@ -1,5 +1,3 @@
-
-from bs4 import BeautifulSoup
 from de.generia.kodi.plugin.backend.web.Resource import Resource
 
 class HtmlResource(Resource):
@@ -9,4 +7,3 @@ class HtmlResource(Resource):
         
     def parse(self):
         super(HtmlResource, self).parse()
-        #self.content = BeautifulSoup(self.content, 'html.parser')
