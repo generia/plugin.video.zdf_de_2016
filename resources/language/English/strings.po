@@ -63,3 +63,7 @@ msgstr ""
 msgctxt "#32012"
 msgid "con't find stream-info-url in video-content"
 msgstr ""
+
+msgctxt "#32013"
+msgid "No results found for last search."
+msgstr ""

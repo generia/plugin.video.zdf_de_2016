@@ -55,7 +55,17 @@ navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
-rubricResource = RubricResource(baseUrl + '/filme-serien')
+rubricResource = RubricResource(baseUrl + '/verbraucher')
+rubricResource.parse()
+firstCluster = None
+for cluster in rubricResource.clusters:
+    if firstCluster is None:
+        firstCluster = cluster
+    print cluster
+    for teaser in cluster.teasers:
+        print teaser
+    
+rubricResource = RubricResource(baseUrl + '/verbraucher', firstCluster.listType, firstCluster.listStart, firstCluster.listEnd)
 rubricResource.parse()
 for cluster in rubricResource.clusters:
     print cluster

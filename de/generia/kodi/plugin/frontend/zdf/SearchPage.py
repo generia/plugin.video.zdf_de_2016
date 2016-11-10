@@ -37,6 +37,10 @@ class SearchPage(ItemPage):
         searchPage = SearchResource(searchUrl)
         self._parse(searchPage)
         self.debug("found '{}' results.", len(searchPage.teasers))
+        
+        if len(searchPage.teasers) == 0:
+            response.sendInfo(self._(32013))
+        
         if searchPage.moreUrl is not None:
             self.debug("load-more-url: '{}'.", searchPage.moreUrl)
 

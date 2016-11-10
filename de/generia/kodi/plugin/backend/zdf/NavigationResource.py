@@ -1,5 +1,6 @@
 from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
 
+from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
 from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
@@ -36,7 +37,7 @@ class NavigationResource(HtmlResource):
         self.rubrics = []
         while dropdownLinksMatch is not None:
             url = dropdownLinksMatch.group(1).strip()
-            title = dropdownLinksMatch.group(2).strip()
+            title = stripHtml(dropdownLinksMatch.group(2))
             rubric = Rubric(title, url)
             self.rubrics.append(rubric)
             pos = dropdownLinksMatch.end(0)

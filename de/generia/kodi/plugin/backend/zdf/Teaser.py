@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
 from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
@@ -60,14 +61,14 @@ class Teaser(object):
         pass
                
     def init(self, title, text, image, url, date, genre, category, label, type, playable):
-        self.title = title
-        self.text = text
+        self.title = stripHtml(title)
+        self.text = stripHtml(text)
         self.image = image
         self.url = url
         self.date = date
-        self.genre = genre
-        self.category = category
-        self.label = label
+        self.genre = stripHtml(genre)
+        self.category = stripHtml(category)
+        self.label = stripHtml(label)
         self.type = type
         self.playable = playable
         self.contentName = None
@@ -89,13 +90,13 @@ class Teaser(object):
         if teaserMatch is None:
             teaserMatch = teaserPattern.search(string, pos)
         if teaserMatch is None:
-            return -1
+            return pos
         class_ = teaserMatch.group(1)
-        if class_.find('m-hidden') != -1:
-            return -1
         
         article = getTag('article', string, teaserMatch)
         endPos = teaserMatch.start(0) + len(article)
+        if class_.find('m-hidden') != -1:
+            return endPos
         
         sourceMatch = sourcePattern.search(article)
         src = None
