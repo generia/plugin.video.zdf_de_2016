@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="32014">
+    <setting label="32015" id="mergeCategoryAndTitle" type="bool" default="true"/>
+    <setting label="32016" id="itemPattern" type="text" default="{$date }{[$genre | $category]}{($playable) }{$label }{$title}"/>
+  </category>
+</settings>
+ 
