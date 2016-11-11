@@ -81,7 +81,7 @@ msgid "Item pattern"
 msgstr ""
 
 msgctxt "#32017"
-msgid "Show more ..."
+msgid "Show more (page {0} of {1}) ..."
 msgstr ""
 
 msgctxt "#32018"
@@ -90,4 +90,16 @@ msgstr ""
 
 msgctxt "#32019"
 msgid "Show only playable search results"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Loading results"
+msgstr ""
+
+msgctxt "#32021"
+msgid "page 1 ..."
+msgstr ""
+
+msgctxt "#32022"
+msgid "page {0} of {1} ..."
 msgstr ""

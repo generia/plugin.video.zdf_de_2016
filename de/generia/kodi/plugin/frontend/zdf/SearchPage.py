@@ -1,7 +1,9 @@
 import urllib
 import urlparse
+import math
 
 import xbmc
+import xbmcgui
 import xbmcplugin
 
 from de.generia.kodi.plugin.backend.zdf.SearchResource import SearchResource       
@@ -16,10 +18,14 @@ from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 class SearchPage(ItemPage):
 
     def service(self, request, response):
-
-        apiToken = request.params['apiToken']
+        apiToken = request.getParam('apiToken')
+        pages = int(request.getParam('pages', -1))
+        page = int(request.getParam('page', 1))
+        
         query = dict(request.params)
         del query['apiToken']
+        if 'pages' in query:
+            del query['pages']
         
         if 'q' not in query:
             self.info("Timer - getting search-string from keyboard ...")
@@ -34,10 +40,21 @@ class SearchPage(ItemPage):
 
         self.info("Timer - loading results  ...")
         start = self.context.log.start()
-        self._loadResults(request, response, apiToken, query)
-        self.info("Timer - loading results ... done. [{} ms]", self.context.log.stop(start))
+        self._progress = xbmcgui.DialogProgress()
+        try:
+            msg = self._(32021)
+            if pages != -1:
+                msg = self._(32022, page, pages)
+            self._progress.create(self._(32020), msg)
+            self._progress.update(0, msg)
+            self._loadResults(request, response, apiToken, pages, page, query)
+        except:
+            self.warn("Timer - loading results ... expeption")            
+        finally:
+            self.info("Timer - loading results ... done. [{} ms]", self.context.log.stop(start))
+            self._progress.close();
 
-    def _loadResults(self, request, response, apiToken, query):
+    def _loadResults(self, request, response, apiToken, pages, page, query):
         queryParams = urllib.urlencode(query)
         searchUrl = Constants.baseUrl + "/suche?" + queryParams
         
@@ -49,6 +66,8 @@ class SearchPage(ItemPage):
         if len(searchPage.teasers) == 0:
             response.sendInfo(self._(32013))
         
+        pages = int(math.ceil(float(searchPage.results) / float(searchPage.resultsPerPage)))
+        
         self.results = 0
         self._addItems(response, searchPage.teasers, apiToken)
         
@@ -56,9 +75,11 @@ class SearchPage(ItemPage):
             return
         
         if self.settings.loadAllSearchResults:
-            self._addMoreResults(response, searchPage.moreUrl, apiToken)
+            self._addMoreResults(response, searchPage.moreUrl, apiToken, pages, page)
         else:
-            self._addMoreFolder(response, searchPage.moreUrl, apiToken)
+            self._addMoreFolder(response, searchPage.moreUrl, apiToken, pages, page)
+            
+        self._progress.update(percent=100)
         self.info("added '{}' result-items.", self.results)
 
     def _addItems(self, response, teasers, apiToken):
@@ -71,10 +92,14 @@ class SearchPage(ItemPage):
                 self.results += 1
         self.debug("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
 
-    def _addMoreResults(self, response, moreUrl, apiToken):
-        while moreUrl is not None:
+    def _addMoreResults(self, response, moreUrl, apiToken, pages, page):
+        while page < pages and not self._progress.iscanceled():
             moreUrl = moreUrl.replace('&#x3D;', '=')
             moreUrl = moreUrl.replace('&amp;', '&')
+
+            page += 1
+            percent = page*100/pages
+            self._progress.update(percent, self._(32022, page, pages))
 
             searchUrl = Constants.baseUrl + moreUrl
             self.info("searching url: '{}' ...", searchUrl)
@@ -88,12 +113,13 @@ class SearchPage(ItemPage):
                 moreUrl = None
             self.info("found '{}' results.", len(searchPage.teasers))
 
-    def _addMoreFolder(self, response, moreUrl, apiToken):
-        if moreUrl is not None:                
-            moreAction = self._getMoreAction(moreUrl, apiToken)
-            response.addFolder(self._(32017), moreAction)
+    def _addMoreFolder(self, response, moreUrl, apiToken, pages, page):
+        if page < pages:                
+            page += 1
+            moreAction = self._getMoreAction(moreUrl, apiToken, pages, page)
+            response.addFolder(self._(32017, page, pages), moreAction)
 
-    def _getMoreAction(self, moreUrl, apiToken):
+    def _getMoreAction(self, moreUrl, apiToken, pages, page):
         i = moreUrl.find('?')
         if i != -1:
             moreQuery = moreUrl[i+1:]
@@ -103,6 +129,8 @@ class SearchPage(ItemPage):
             for key, value in searchArgs.iteritems():
                 searchArgs[key] = value[0]
             searchArgs['apiToken'] = apiToken
+            searchArgs['pages'] = pages
+            searchArgs['page'] = page
             moreAction = Action('SearchPage', searchArgs)
             return moreAction
         

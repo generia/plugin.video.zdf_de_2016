@@ -34,13 +34,15 @@ configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
 '''
-'''
+
 searchPage = SearchResource(searchUrl)
 searchPage.parse()
+print str(searchPage.resultsPerPage) + " - #" + str(searchPage.results)
 for teaser in searchPage.teasers:
     print "- " + str(teaser)
-print "load-more: " + searchPage.moreUrl
-'''
+if searchPage.moreUrl is not None:
+    print "load-more: " + searchPage.moreUrl
+
 '''
 teaser = searchPage.teasers[1]
 videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
@@ -54,6 +56,7 @@ navigationResource = NavigationResource(baseUrl)
 navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
+'''
 '''
 rubricResource = RubricResource(baseUrl + '/verbraucher')
 rubricResource.parse()
@@ -71,7 +74,7 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-    
+''' 
 '''
 html = getUrl(searchUrl)
 

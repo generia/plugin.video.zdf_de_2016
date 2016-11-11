@@ -14,8 +14,8 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class PlayVideo(Pagelet):
  
     def service(self, request, response):
-        apiToken = request.params['apiToken']
-        contentName = request.params['contentName']
+        apiToken = request.getParam('apiToken')
+        contentName = request.getParam('contentName')
 
         item = None
         if contentName is not None:

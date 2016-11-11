@@ -9,7 +9,7 @@ from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 class RubricsPage(ItemPage):
 
     def service(self, request, response):
-        apiToken = request.params['apiToken']
+        apiToken = request.getParam('apiToken')
 
         navigation = NavigationResource(Constants.baseUrl)
         self._parse(navigation)

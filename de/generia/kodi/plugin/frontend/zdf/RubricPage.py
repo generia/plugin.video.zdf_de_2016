@@ -11,18 +11,12 @@ from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 class RubricPage(ItemPage):
 
     def service(self, request, response):
-        apiToken = request.params['apiToken']
-        rubricUrl = request.params['rubricUrl']
-        listType = None        
-        if 'listType' in request.params:
-            listType = request.params['listType']
-        listStart = -1
-        if 'listStart' in request.params:
-            listStart = int(request.params['listStart'])
-        listEnd = -1
-        if 'listEnd' in request.params:
-            listEnd = int(request.params['listEnd'])
-
+        apiToken = request.getParam('apiToken')
+        rubricUrl = request.getParam('rubricUrl')
+        listType = request.getParam('listType')
+        listStart = int(request.getParam('listStart', -1))
+        listEnd = int(request.getParam('listEnd', -1))
+        
         self.info("rubric-page: url='{}', listType='{}', listStart='{}', listEnd='{}'", rubricUrl, listType, listStart, listEnd)
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl, listType, listStart, listEnd)

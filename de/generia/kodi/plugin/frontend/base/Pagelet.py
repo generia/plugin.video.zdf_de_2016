@@ -44,6 +44,11 @@ class Request(object):
         self.handle = handle
         self.params = params
     
+    def getParam(self, name, default=None):
+        if name in self.params:
+            return self.params[name]
+        return default
+    
 class Response(object):
     def __init__(self, context, baseUrl, handle):
         self.context = context
@@ -111,8 +116,13 @@ class Pagelet(object):
     def service(self, request, response):
         pass
         
-    def _(self, id):
-        return self.addon.getLocalizedString(id)
+    def _(self, id, *args):
+        msg = self.addon.getLocalizedString(id)
+        msg2 = msg
+        if len(args) > 0:
+            msg = msg.format(*args)
+        #self.info("localize string '{}' args='{}' -> '{}' ('{}')", id, len(args), msg, msg2)
+        return msg
     
     def _parse(self, resource):
         log = self.context.log

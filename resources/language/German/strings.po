@@ -99,8 +99,8 @@ msgid "Item pattern"
 msgstr "Listeneintrag Template"
 
 msgctxt "#32017"
-msgid "Show more ..."
-msgstr "Mehr ..."
+msgid "Show more (page {0} of {1}) ..."
+msgstr "Mehr Suchergebnisse (Seite {0} von {1}) ..."
 
 msgctxt "#32018"
 msgid "Load all search results"
@@ -109,3 +109,15 @@ msgstr "Alle Suchergebnisse laden"
 msgctxt "#32019"
 msgid "Show only playable search results"
 msgstr "Nur abspielbare Suchergebnisse anzeigen"
+
+msgctxt "#32020"
+msgid "Loading results"
+msgstr "Lade Ergebnisse"
+
+msgctxt "#32021"
+msgid "page 1 ..."
+msgstr "Seite 1 ..."
+
+msgctxt "#32022"
+msgid "page {0} of {1} ..."
+msgstr "Seite {0} von {1} ..."
