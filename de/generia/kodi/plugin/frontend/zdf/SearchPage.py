@@ -16,6 +16,7 @@ from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 class SearchPage(ItemPage):
 
     def service(self, request, response):
+
         apiToken = request.params['apiToken']
         query = dict(request.params)
         del query['apiToken']
@@ -31,21 +32,25 @@ class SearchPage(ItemPage):
                 response.sendInfo(self._(32006))
                 return
 
+        self.info("Timer - loading results  ...")
+        start = self.context.log.start()
+        self._loadResults(request, response, apiToken, query)
+        self.info("Timer - loading results ... done. [{} ms]", self.context.log.stop(start))
+
+    def _loadResults(self, request, response, apiToken, query):
         queryParams = urllib.urlencode(query)
         searchUrl = Constants.baseUrl + "/suche?" + queryParams
         
-        self.debug("searching url: '{}' ...", searchUrl)
+        self.info("searching url: '{}' ...", searchUrl)
         searchPage = SearchResource(searchUrl)
         self._parse(searchPage)
-        self.debug("found '{}' results.", len(searchPage.teasers))
+        self.info("found '{}' results.", len(searchPage.teasers))
         
         if len(searchPage.teasers) == 0:
             response.sendInfo(self._(32013))
         
-        self.info("Timer - creating list items  ...")
-        start = self.context.log.start()
+        self.results = 0
         self._addItems(response, searchPage.teasers, apiToken)
-        self.info("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
         
         if len(searchPage.teasers) == 0:
             return
@@ -54,12 +59,17 @@ class SearchPage(ItemPage):
             self._addMoreResults(response, searchPage.moreUrl, apiToken)
         else:
             self._addMoreFolder(response, searchPage.moreUrl, apiToken)
+        self.info("added '{}' result-items.", self.results)
 
     def _addItems(self, response, teasers, apiToken):
+        self.debug("Timer - creating list items  ...")
+        start = self.context.log.start()
         for teaser in teasers:
             if not self.settings.showOnlyPlayableSearchResults or teaser.playable: 
                 item = self._createItem(teaser, apiToken)
                 response.addItem(item)
+                self.results += 1
+        self.debug("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
 
     def _addMoreResults(self, response, moreUrl, apiToken):
         while moreUrl is not None:
