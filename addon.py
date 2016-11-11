@@ -68,12 +68,14 @@ class XbmcResponse(Response):
     def addItem(self, item):
         if item is None:
             return
-        infoLabels = {}
+
         title = item.title
 
+        infoLabels = {}
         infoLabels['title'] = title
         infoLabels['sorttitle'] = title
         infoLabels['genre'] = item.genre
+        infoLabels['plot'] = item.text
 
         date = item.date
         if date is not None and date != "":
