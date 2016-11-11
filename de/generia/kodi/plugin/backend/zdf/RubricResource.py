@@ -7,6 +7,17 @@ from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
+fallbackTitlePattern = compile('<li class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
+'''
+<li class="item current" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+    
+    
+        <a href="/serien/die-chefin" class="link js-track-click" data-track="{&quot;element&quot;: &quot;Breadcrumb&quot;, &quot;action&quot;: &quot;Click_Breadcrumb&quot;, &quot;actionDetail&quot;: &quot;{textContent}&quot;}" itemprop="item">
+    
+    Die Chefin
+    
+        </a>
+'''
 
 listPattern = compile('<[^ ]*>[^>]*class="([^"]*b-cluster m-filter[^"]*|[^"]*b-content-teaser-list[^"]*)"[^>]*>')
 
@@ -45,7 +56,14 @@ class RubricResource(HtmlResource):
 
         self.clusters = []
         if self.listType is None:
+            
             pos = 0
+            title = None
+            fallbackTitleMatch = fallbackTitlePattern.search(self.content, pos)
+            if fallbackTitleMatch is not None:
+                title = stripHtml(fallbackTitleMatch.group(1))
+                pos = fallbackTitleMatch.end(0)
+                
             match = listPattern.search(self.content, pos)
             while match is not None:
                 pos = match.end(0)
@@ -60,9 +78,10 @@ class RubricResource(HtmlResource):
                 if titleMatch is not None:
                     title = stripHtml(titleMatch.group(1))
                     pos = titleMatch.end(0)
-                    cluster = Cluster(title, listType, pos)
-                    self.clusters.append(cluster)
-    
+                    
+                cluster = Cluster(title, listType, pos)
+                self.clusters.append(cluster)
+                
                 match = listPattern.search(self.content, pos)
 
                 if match is not None:

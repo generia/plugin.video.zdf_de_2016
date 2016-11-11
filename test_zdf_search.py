@@ -34,7 +34,7 @@ configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
 '''
-
+'''
 searchPage = SearchResource(searchUrl)
 searchPage.parse()
 print str(searchPage.resultsPerPage) + " - #" + str(searchPage.results)
@@ -42,7 +42,7 @@ for teaser in searchPage.teasers:
     print "- " + str(teaser)
 if searchPage.moreUrl is not None:
     print "load-more: " + searchPage.moreUrl
-
+'''
 '''
 teaser = searchPage.teasers[1]
 videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
@@ -57,8 +57,8 @@ navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
-'''
-rubricResource = RubricResource(baseUrl + '/verbraucher')
+
+rubricResource = RubricResource(baseUrl + '/dokumentation/planet-e')
 rubricResource.parse()
 firstCluster = None
 for cluster in rubricResource.clusters:
@@ -67,7 +67,7 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-    
+'''    
 rubricResource = RubricResource(baseUrl + '/verbraucher', firstCluster.listType, firstCluster.listStart, firstCluster.listEnd)
 rubricResource.parse()
 for cluster in rubricResource.clusters:
