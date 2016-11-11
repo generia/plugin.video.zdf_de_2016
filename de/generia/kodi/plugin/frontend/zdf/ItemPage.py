@@ -19,11 +19,11 @@ class ItemPage(Pagelet):
             genre += sep + teaser.category
         title = teaser.title
 
-        self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
+        #self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
         if self.settings.mergeCategoryAndTitle:        
             if teaser.category is not None and title.startswith(teaser.category):
                 title = title[len(teaser.category):].strip()
-        self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
+        #self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
 
         if teaser.label is not None and teaser.label != "":
             label = teaser.label

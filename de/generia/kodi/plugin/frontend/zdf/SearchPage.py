@@ -1,4 +1,5 @@
 import urllib
+import urlparse
 
 import xbmc
 import xbmcplugin
@@ -41,15 +42,60 @@ class SearchPage(ItemPage):
         if len(searchPage.teasers) == 0:
             response.sendInfo(self._(32013))
         
-        if searchPage.moreUrl is not None:
-            self.debug("load-more-url: '{}'.", searchPage.moreUrl)
-
         self.info("Timer - creating list items  ...")
         start = self.context.log.start()
-        for teaser in searchPage.teasers:
-            item = self._createItem(teaser, apiToken)
-            response.addItem(item)
+        self._addItems(response, searchPage.teasers, apiToken)
         self.info("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
+        
+        if len(searchPage.teasers) == 0:
+            return
+        
+        if self.settings.loadAllSearchResults:
+            self._addMoreResults(response, searchPage.moreUrl, apiToken)
+        else:
+            self._addMoreFolder(response, searchPage.moreUrl, apiToken)
+
+    def _addItems(self, response, teasers, apiToken):
+        for teaser in teasers:
+            if not self.settings.showOnlyPlayableSearchResults or teaser.playable: 
+                item = self._createItem(teaser, apiToken)
+                response.addItem(item)
+
+    def _addMoreResults(self, response, moreUrl, apiToken):
+        while moreUrl is not None:
+            moreUrl = moreUrl.replace('&#x3D;', '=')
+            moreUrl = moreUrl.replace('&amp;', '&')
+
+            searchUrl = Constants.baseUrl + moreUrl
+            self.info("searching url: '{}' ...", searchUrl)
+            searchPage = SearchResource(searchUrl)
+            self._parse(searchPage)
+            
+            if len(searchPage.teasers) > 0:
+                self._addItems(response, searchPage.teasers, apiToken)
+                moreUrl = searchPage.moreUrl
+            else: 
+                moreUrl = None
+            self.info("found '{}' results.", len(searchPage.teasers))
+
+    def _addMoreFolder(self, response, moreUrl, apiToken):
+        if moreUrl is not None:                
+            moreAction = self._getMoreAction(moreUrl, apiToken)
+            response.addFolder(self._(32017), moreAction)
+
+    def _getMoreAction(self, moreUrl, apiToken):
+        i = moreUrl.find('?')
+        if i != -1:
+            moreQuery = moreUrl[i+1:]
+            moreQuery = moreQuery.replace('&#x3D;', '=')
+            moreQuery = moreQuery.replace('&amp;', '&')
+            searchArgs = urlparse.parse_qs(moreQuery)
+            for key, value in searchArgs.iteritems():
+                searchArgs[key] = value[0]
+            searchArgs['apiToken'] = apiToken
+            moreAction = Action('SearchPage', searchArgs)
+            return moreAction
+        
 
     def _getKeyboardInput(self):
         keyboard = xbmc.Keyboard('', self._(32005))

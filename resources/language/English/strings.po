@@ -79,3 +79,15 @@ msgstr ""
 msgctxt "#32016"
 msgid "Item pattern"
 msgstr ""
+
+msgctxt "#32017"
+msgid "Show more ..."
+msgstr ""
+
+msgctxt "#32018"
+msgid "Load all search results"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Show only playable search results"
+msgstr ""

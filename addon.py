@@ -110,6 +110,8 @@ class XbmcResponse(Response):
 class Settings(object):
     def __init__(self, handle):
         self.mergeCategoryAndTitle = xbmcplugin.getSetting(handle, 'mergeCategoryAndTitle') == 'true'
+        self.loadAllSearchResults = xbmcplugin.getSetting(handle, 'loadAllSearchResults') == 'true'
+        self.showOnlyPlayableSearchResults = xbmcplugin.getSetting(handle, 'showOnlyPlayableSearchResults') == 'true'
         self.itemPattern = xbmcplugin.getSetting(handle, 'itemPattern')
 
 

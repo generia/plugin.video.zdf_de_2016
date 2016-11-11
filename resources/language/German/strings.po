@@ -97,3 +97,15 @@ msgstr "Verbinde Kategory und Titel"
 msgctxt "#32016"
 msgid "Item pattern"
 msgstr "Listeneintrag Template"
+
+msgctxt "#32017"
+msgid "Show more ..."
+msgstr "Mehr ..."
+
+msgctxt "#32018"
+msgid "Load all search results"
+msgstr "Alle Suchergebnisse laden"
+
+msgctxt "#32019"
+msgid "Show only playable search results"
+msgstr "Nur abspielbare Suchergebnisse anzeigen"
