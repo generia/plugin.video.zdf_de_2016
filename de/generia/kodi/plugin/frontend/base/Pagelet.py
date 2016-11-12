@@ -55,7 +55,7 @@ class Response(object):
         self.baseUrl = baseUrl
         self.handle = handle
 
-    def addItem(self):
+    def addItem(self, item):
         pass
     
     def addFolder(self, title, action):
@@ -135,19 +135,15 @@ class Pagelet(object):
 
     def debug(self, message, *args):
         self.context.log.debug(self.logPrefix + message, type(self).__name__, *args)
-        pass
     
     def info(self, message, *args):
         self.context.log.info(self.logPrefix + message, type(self).__name__, *args)
-        pass
 
     def warn(self, message, *args):
         self.context.log.warn(self.logPrefix + message, type(self).__name__, *args)
-        pass
     
     def error(self, message, *args):
         self.context.log.error(self.logPrefix + message, type(self).__name__, *args)
-        pass
 
 
 class PageletFactory(object):
