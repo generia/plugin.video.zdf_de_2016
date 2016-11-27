@@ -87,7 +87,10 @@ class RubricResource(HtmlResource):
         moduleItemMatch = moduleItemPattern.search(self.content, pos)
         if moduleItemMatch is not None:
             pos = moduleItemMatch.end(0)
-            item = self.content[pos:match.end(0)]
+            end = len(self.content)-1
+            if match is not None:
+                end = match.end(0)
+            item = self.content[pos:end]
             teaser = Teaser()
             p = teaser.parseLabel(item, 0)
             p = teaser.parseCategory(item, p)
