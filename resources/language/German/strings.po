@@ -136,7 +136,7 @@ msgstr "Zeige Genre im Titel"
 
 msgctxt "#32026"
 msgid "Show playable '(>)' in title"
-msgstr "Zeige abspielbar '(>)' im Title"
+msgstr "Zeige abspielbar '(>)' im Titel"
 
 msgctxt "#32027"
 msgid "Show tags in title"
