@@ -17,6 +17,9 @@ class PlayVideo(Pagelet):
     def service(self, request, response):
         apiToken = request.getParam('apiToken')
         contentName = request.getParam('contentName')
+        title = request.getParam('title')
+        date = request.getParam('date')
+        genre = request.getParam('genre')
 
         item = None
         if contentName is not None:
@@ -49,14 +52,13 @@ class PlayVideo(Pagelet):
                 infoLabels = {}
                 infoLabels['title'] = title
                 infoLabels['sorttitle'] = title
-                #infoLabels['genre'] = videoContent.genre
+                infoLabels['genre'] = genre
                 #infoLabels['plot'] = text
                 #infoLabels['plotoutline'] = text
                 infoLabels['tvshowtitle'] = title
                 infoLabels['tagline'] = text
                 infoLabels['duration'] = videoContent.duration
         
-                date = videoContent.date
                 if date is not None and date != "":
                     infoLabels['date'] = date
         

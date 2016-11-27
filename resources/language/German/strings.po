@@ -87,8 +87,8 @@ msgid "No results found for last search."
 msgstr "Die Suche lieferte keine Treffer."
 
 msgctxt "#32014"
-msgid "General"
-msgstr "Allgemein"
+msgid "Searching"
+msgstr "Suchen"
 
 msgctxt "#32015"
 msgid "Merge category and title"
@@ -121,3 +121,23 @@ msgstr "Seite 1 ..."
 msgctxt "#32022"
 msgid "page {0} of {1} ..."
 msgstr "Seite {0} von {1} ..."
+
+msgctxt "#32023"
+msgid "Labeling"
+msgstr "Beschriftung"
+
+msgctxt "#32024"
+msgid "Show date in title"
+msgstr "Zeige Datum im Titel"
+
+msgctxt "#32025"
+msgid "Show genre in title"
+msgstr "Zeige Genre im Titel"
+
+msgctxt "#32026"
+msgid "Show playable '(>)' in title"
+msgstr "Zeige abspielbar '(>)' im Title"
+
+msgctxt "#32027"
+msgid "Show tags in title"
+msgstr "Zeige Tags im Titel"

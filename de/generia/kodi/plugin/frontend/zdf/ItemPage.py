@@ -9,6 +9,7 @@ class ItemPage(Pagelet):
 
 
     def _createItem(self, teaser, apiToken):
+        settings = self.settings
         item = None
         genre = ''
         sep = ''
@@ -20,30 +21,30 @@ class ItemPage(Pagelet):
         title = teaser.title
 
         #self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
-        if self.settings.mergeCategoryAndTitle:        
+        if settings.mergeCategoryAndTitle and settings.showGenreInTitle:        
             if teaser.category is not None and title.startswith(teaser.category):
                 title = title[len(teaser.category):].strip()
-        #self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", self.settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
+        #self.log.info("settings.mergeCategoryAndTitle: {} - cat: {}, title: {}, starts: {}.", settings.mergeCategoryAndTitle, teaser.category, title, title.startswith(teaser.category))
 
-        if teaser.label is not None and teaser.label != "":
+        if teaser.label is not None and teaser.label != "" and settings.showTagsInTitle:
             label = teaser.label
             if teaser.type is not None:
                 label = teaser.type.capitalize() + ": " + label
             title = '[' + label + '] ' + title
         title.strip()
         
-        if teaser.playable:
+        if teaser.playable and settings.showPlayableInTitle:
             title = '(>) ' + title
-        if genre is not None and genre != "":
+        if genre is not None and genre != "" and settings.showGenreInTitle:
             title = '[' + genre + '] ' + title
         title = title.strip()
 
-        if teaser.date is not None:
+        if teaser.date is not None and settings.showDateInTitle:
             title = teaser.date + " " + title
            
         isFolder = False
         if teaser.contentName is not None and teaser.playable:
-            action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName})
+            action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName, 'title': title, 'date': teaser.date, 'genre': genre})
             isFolder = False
         else:   
             action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': teaser.url})

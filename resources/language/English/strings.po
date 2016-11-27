@@ -69,7 +69,7 @@ msgid "No results found for last search."
 msgstr ""
 
 msgctxt "#32014"
-msgid "General"
+msgid "Searching"
 msgstr ""
 
 msgctxt "#32015"
@@ -102,4 +102,24 @@ msgstr ""
 
 msgctxt "#32022"
 msgid "page {0} of {1} ..."
+msgstr ""
+
+msgctxt "#32023"
+msgid "Labeling"
+msgstr ""
+
+msgctxt "#32024"
+msgid "Show date in title"
+msgstr ""
+
+msgctxt "#32025"
+msgid "Show genre in title"
+msgstr ""
+
+msgctxt "#32026"
+msgid "Show playable '(>)' in title"
+msgstr ""
+
+msgctxt "#32027"
+msgid "Show tags in title"
 msgstr ""
