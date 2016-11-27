@@ -85,8 +85,9 @@ class XbmcResponse(Response):
         if item.image is not None:
             li.setArt({'poster': item.image, 'banner': item.image, 'thumb': item.image, 'icon': item.image, 'fanart': item.image})
         li.setInfo(type="Video", infoLabels=infoLabels)
-        li.setProperty('IsPlayable', 'false')
+        li.setProperty('IsPlayable', str(item.isPlayable))
         url = self.encodeUrl(item.action)
+        #li.addContextMenuItems([('Suche -AK','xbmc.RunPlugin(%s?nix=da)'%(self.baseUrl))])
         #li.addContextMenuItems(['Item-Menu', 'RunPlugin(plugin://'+ self.handle +'/'])
         #self.context.log.info("[Response] - {} -> {}, title='{}' date='{}'", item.isFolder, url, title, date)
         xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li, isFolder=item.isFolder)

@@ -2,6 +2,7 @@ import urllib
 
 import xbmc
 import xbmcgui
+import xbmcplugin
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
@@ -43,16 +44,32 @@ class PlayVideo(Pagelet):
                     response.sendError(self._(32012) + " '" + contentName +"'", Action('SearchPage'))
                     return
 
+                title = videoContent.title
+                text = videoContent.text
+                infoLabels = {}
+                infoLabels['title'] = title
+                infoLabels['sorttitle'] = title
+                #infoLabels['genre'] = videoContent.genre
+                #infoLabels['plot'] = text
+                #infoLabels['plotoutline'] = text
+                infoLabels['tvshowtitle'] = title
+                infoLabels['tagline'] = text
+                infoLabels['duration'] = videoContent.duration
+        
+                date = videoContent.date
+                if date is not None and date != "":
+                    infoLabels['date'] = date
+        
+                item = xbmcgui.ListItem(title, text)
+                item.setPath(url)
+                item.setInfo(type="Video", infoLabels=infoLabels)
                 image = videoContent.image
-                item = xbmcgui.ListItem(videoContent.title)
-                item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
+                if image is not None:
+                    item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
                 
                 dialog.update(percent=90, message=self._(32010))
-                self.info("Timer - starting player with url='{1}' ...", url)
-                start = self.log.start()
-                xbmc.Player().play(url, item)
-                self.info("Timer - starting player with url='{1}' ... done. [{2} ms]", url, self.log.stop(start))
-    
+                self.info("setting resolved url='{1}' ...", url)
+                xbmcplugin.setResolvedUrl(response.handle, True, item)
             finally:
                 dialog.close();
             
