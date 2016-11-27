@@ -73,7 +73,7 @@ msgid "Searching"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Merge category and title"
+msgid "Merge genre-category and title"
 msgstr ""
 
 msgctxt "#32016"
