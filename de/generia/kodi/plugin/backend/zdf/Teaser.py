@@ -6,14 +6,14 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 teaserPattern = getTagPattern('article', 'b-content-teaser-item')
-sourcePattern = compile('<source[^>]*class="m-16-9"[^>]*data-srcset="([^"]*)"')
+sourcePattern = compile('class="m-16-9"[^>]*data-srcset="([^"]*)"')
 labelPattern = getTagPattern('div', 'teaser-label')
-iconPattern = compile('<span[^>]*class="icon-[0-9]*_([^ ]*) icon">')
-catPattern = compile('<span[^>]*class="teaser-cat"[^>]*>([^<]*)</span>')
-aPattern = compile('<a[^>]*href="([^"]*)"[^>]*>')
-titleIconPattern = compile('<span\s*class="title-icon icon-[0-9]*_([^"]*)">')
-textPattern = compile('<p[^>]*class="teaser-text"[^>]*>([^<]*)</p>')
-datePattern = compile('<dd[^>]*class="video-airing"[^>]*>([^<]*)</dd>')
+iconPattern = compile('class="icon-[0-9]*_([^ ]*) icon">')
+catPattern = compile('class="teaser-cat"[^>]*>([^<]*)</[^>]*>')
+aPattern = compile('href="([^"]*)"[^>]*>')
+titleIconPattern = compile('class="title-icon icon-[0-9]*_([^"]*)">')
+textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
+datePattern = compile('class="video-airing"[^>]*>([^<]*)</[^>]*>')
 
     
 def compareTeasers(t1, t2):
@@ -88,14 +88,14 @@ class Teaser(object):
 
         return endPos
 
-    def parseImage(self, article, src, pos=0):
+    def parseImage(self, article, pos):
         sourceMatch = sourcePattern.search(article)
         src = None
         if sourceMatch is not None:
             srcset = sourceMatch.group(1)
             src = srcset.split(' ')[0]
             pos = sourceMatch.end(0)
-        self.src = src
+        self.image = src
         return pos
     
     def parseLabel(self, article, pos):
@@ -145,11 +145,16 @@ class Teaser(object):
             url = aMatch.group(1).strip()        
             pos = aMatch.end(0)
             i = pos
-            j = article.find('</a>', i)
             iconMatch = titleIconPattern.search(article, pos)
             if iconMatch is not None:    
                 playable =  iconMatch.group(1) == 'play'
                 i = article.find('</span>', pos) + len('</span>')
+
+            j = article.find('</a>', i)
+            # check for '<span class="arrowhover ...'
+            k = article.find('<span', i)
+            if k != -1 and k < j:
+                j = k
             title = article[i:j]
             title = title.replace('<strong>', '')
             title = title.replace('</strong>', '')
@@ -168,8 +173,8 @@ class Teaser(object):
                     self.contentName = url[j+1:i]
         return pos
     
-    def parseText(self, article, pos):
-        textMatch = textPattern.search(article, pos)
+    def parseText(self, article, pos, pattern=textPattern):
+        textMatch = pattern.search(article, pos)
         text = None
         if textMatch is not None:
             text = textMatch.group(1).strip()
@@ -178,8 +183,8 @@ class Teaser(object):
         self.text = stripHtml(text)
         return pos
         
-    def parseDate(self, article, pos):
-        dateMatch = datePattern.search(article, pos)
+    def parseDate(self, article, pos, pattern=datePattern):
+        dateMatch = pattern.search(article, pos)
         date = None
         if dateMatch is not None:
             date = dateMatch.group(1).strip()

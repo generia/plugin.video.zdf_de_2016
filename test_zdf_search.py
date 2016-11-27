@@ -58,8 +58,12 @@ for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
 
-rubricResource = RubricResource(baseUrl + '/dokumentation/planet-e')
+#rubric = '/krimi'
+rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
+rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
+for teaser in rubricResource.teasers:
+    print teaser
 firstCluster = None
 for cluster in rubricResource.clusters:
     if firstCluster is None:
@@ -67,14 +71,14 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-'''    
-rubricResource = RubricResource(baseUrl + '/verbraucher', firstCluster.listType, firstCluster.listStart, firstCluster.listEnd)
+
+rubricResource = RubricResource(baseUrl + rubric, firstCluster.listType, firstCluster.listStart, firstCluster.listEnd)
 rubricResource.parse()
 for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-''' 
+
 '''
 html = getUrl(searchUrl)
 

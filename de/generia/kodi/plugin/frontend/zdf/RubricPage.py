@@ -1,4 +1,5 @@
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource       
+from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Item        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
@@ -25,10 +26,12 @@ class RubricPage(ItemPage):
         
         if listType is not None:
             if len(clusters) == 1:
-                self._renderCluster(clusters[0], response, apiToken)
+                self._renderTeasers(clusters[0].teasers, response, apiToken)
             else:
                 self.warn("can't find cluster of type '{}' in rubric-url '{}'", listType, rubricUrl)
         else:
+            self._checkTeasers(rubricResource.teasers, apiToken)
+            self._renderTeasers(rubricResource.teasers, response, apiToken)
             self._renderClusters(clusters, response, apiToken, rubricUrl)
             
         
@@ -39,8 +42,18 @@ class RubricPage(ItemPage):
             item = Item(cluster.title, action, isFolder=True)
             response.addItem(item)            
     
-    def _renderCluster(self, cluster, response, apiToken):
-        for teaser in cluster.teasers:
+    
+    def _checkTeasers(self, teasers, apiToken):
+        for teaser in teasers:
+            if teaser.image is None and teaser.contentName is not None:
+                videoContentUrl = Constants.apiBaseUrl + '/content/documents/' + teaser.contentName + '.json?profile=player'
+                self.debug("downloading video-content-url '{1}' ...", videoContentUrl)
+                videoContent = VideoContentResource(videoContentUrl, Constants.apiBaseUrl, apiToken)
+                self._parse(videoContent)
+                teaser.image = videoContent.image
+                    
+    def _renderTeasers(self, teasers, response, apiToken):
+        for teaser in teasers:
             item = self._createItem(teaser, apiToken)
             if item is not None:
                 response.addItem(item)
