@@ -52,8 +52,16 @@ class RubricResource(HtmlResource):
         self.clusters = []
         if self.listType is None:
             self._parseClusters()
+            # return teasers directly, if there is only one cluster
+            if len(self.clusters) == 1:
+                cluster = self.clusters[0]
+                self._parseClusterTeasers(cluster)
+                self.teasers.extend(cluster.teasers)
+                self.clusters = []
         else:
-            self._parseClusterTeasers()
+            cluster = Cluster(None, self.listType, self.listStart, self.listEnd)
+            self.clusters.append(cluster)
+            self._parseClusterTeasers(cluster)
             
     def _parseClusters(self):
             
@@ -120,15 +128,13 @@ class RubricResource(HtmlResource):
             cluster.listEnd = len(self.content)-1
         return match
     
-    def _parseClusterTeasers(self):
-        cluster = Cluster(None, self.listType, self.listStart, self.listEnd)
-        self.clusters.append(cluster)
+    def _parseClusterTeasers(self, cluster):
         itemPattern = sectionItemPattern
         if self.listType == 'cluster':
             itemPattern = clusterItemPattern
-        pos = self.listStart
+        pos = cluster.listStart
         itemMatch = itemPattern.search(self.content, pos)
-        while pos < self.listEnd and itemMatch is not None:
+        while pos < cluster.listEnd and itemMatch is not None:
             teaser = Teaser()
             pos = teaser.parse(self.content, pos, itemMatch)
             if teaser.valid():
