@@ -6,14 +6,14 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 teaserPattern = getTagPattern('article', 'b-content-teaser-item')
-sourcePattern = compile('<source\s*class="m-16-9"[^>]*data-srcset="([^"]*)"')
+sourcePattern = compile('<source[^>]*class="m-16-9"[^>]*data-srcset="([^"]*)"')
 labelPattern = getTagPattern('div', 'teaser-label')
-iconPattern = compile('<span\s*class="icon-[0-9]*_([^ ]*) icon">')
-catPattern = compile('<span\s*class="teaser-cat"[^>]*>([^<]*)</span>')
-aPattern = compile('<a\s*href="([^"]*)"[^>]*>')
+iconPattern = compile('<span[^>]*class="icon-[0-9]*_([^ ]*) icon">')
+catPattern = compile('<span[^>]*class="teaser-cat"[^>]*>([^<]*)</span>')
+aPattern = compile('<a[^>]*href="([^"]*)"[^>]*>')
 titleIconPattern = compile('<span\s*class="title-icon icon-[0-9]*_([^"]*)">')
-textPattern = compile('<p\s*class="teaser-text"[^>]*>([^<]*)</p>')
-datePattern = compile('<dd\s*class="video-airing"[^>]*>([^<]*)</dd>')
+textPattern = compile('<p[^>]*class="teaser-text"[^>]*>([^<]*)</p>')
+datePattern = compile('<dd[^>]*class="video-airing"[^>]*>([^<]*)</dd>')
 
     
 def compareTeasers(t1, t2):
@@ -59,25 +59,6 @@ class Teaser(object):
     
     def __init__(self):
         pass
-               
-    def init(self, title, text, image, url, date, genre, category, label, type, playable):
-        self.title = stripHtml(title)
-        self.text = stripHtml(text)
-        self.image = image
-        self.url = url
-        self.date = date
-        self.genre = stripHtml(genre)
-        self.category = stripHtml(category)
-        self.label = stripHtml(label)
-        self.type = type
-        self.playable = playable
-        self.contentName = None
-        if url is not None:
-            i = url.rfind('.')
-            if i != -1:
-                j = url.rfind('/')
-                if j != -1:
-                    self.contentName = url[j+1:i]
                     
     def valid(self):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
@@ -97,14 +78,27 @@ class Teaser(object):
         endPos = teaserMatch.start(0) + len(article)
         if class_.find('m-hidden') != -1:
             return endPos
-        
+                
+        pos = self.parseImage(article, pos)
+        pos = self.parseLabel(article, pos)
+        pos = self.parseCategory(article, pos)
+        pos = self.parseTitle(article, pos)
+        pos = self.parseText(article, pos)
+        pos = self.parseDate(article, pos)
+
+        return endPos
+
+    def parseImage(self, article, src, pos=0):
         sourceMatch = sourcePattern.search(article)
         src = None
         if sourceMatch is not None:
             srcset = sourceMatch.group(1)
             src = srcset.split(' ')[0]
             pos = sourceMatch.end(0)
-        
+        self.src = src
+        return pos
+    
+    def parseLabel(self, article, pos):
         labelMatch = labelPattern.search(article, pos)
         label = None
         type = None
@@ -120,7 +114,12 @@ class Teaser(object):
             label = label.replace('<strong>', '')
             label = label.replace('</strong>', '')
             label = label.strip()
-            
+
+        self.label = stripHtml(label)
+        self.type = type
+        return pos
+    
+    def parseCategory(self, article, pos):
         catMatch = catPattern.search(article, pos)
         genre = None
         category = None
@@ -133,6 +132,11 @@ class Teaser(object):
                 category = parts[1].strip()
             pos = catMatch.end(0)
             
+        self.genre = stripHtml(genre)
+        self.category = stripHtml(category)
+        return pos
+        
+    def parseTitle(self, article, pos):
         aMatch = aPattern.search(article, pos)
         title = None
         url = None
@@ -152,17 +156,35 @@ class Teaser(object):
             title = title.strip()
             pos = j + len('</a>') 
     
+        self.title = stripHtml(title)
+        self.url = url
+        self.playable = playable
+        self.contentName = None
+        if url is not None:
+            i = url.rfind('.')
+            if i != -1:
+                j = url.rfind('/')
+                if j != -1:
+                    self.contentName = url[j+1:i]
+        return pos
+    
+    def parseText(self, article, pos):
         textMatch = textPattern.search(article, pos)
         text = None
         if textMatch is not None:
             text = textMatch.group(1).strip()
             pos = textMatch.end(0)
-            
+
+        self.text = stripHtml(text)
+        return pos
+        
+    def parseDate(self, article, pos):
         dateMatch = datePattern.search(article, pos)
         date = None
         if dateMatch is not None:
             date = dateMatch.group(1).strip()
             pos = dateMatch.end(0)
     
-        self.init(title, text, src, url, date, genre, category, label, type, playable)
-        return endPos
+        self.date = date
+        return pos
+        
