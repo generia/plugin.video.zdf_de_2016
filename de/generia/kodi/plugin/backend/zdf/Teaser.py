@@ -9,11 +9,11 @@ teaserPattern = getTagPattern('article', 'b-content-teaser-item')
 sourcePattern = compile('<source\s*class="m-16-9"[^>]*data-srcset="([^"]*)"')
 labelPattern = getTagPattern('div', 'teaser-label')
 iconPattern = compile('<span\s*class="icon-[0-9]*_([^ ]*) icon">')
-catPattern = compile('<span class="teaser-cat"[^>]*>([^<]*)</span>')
-aPattern = compile('<a href="([^"]*)"[^>]*>')
+catPattern = compile('<span\s*class="teaser-cat"[^>]*>([^<]*)</span>')
+aPattern = compile('<a\s*href="([^"]*)"[^>]*>')
 titleIconPattern = compile('<span\s*class="title-icon icon-[0-9]*_([^"]*)">')
-textPattern = compile('<p class="teaser-text"[^>]*>([^<]*)</p>')
-datePattern = compile('<dd class="video-airing"[^>]*>([^<]*)</dd>')
+textPattern = compile('<p\s*class="teaser-text"[^>]*>([^<]*)</p>')
+datePattern = compile('<dd\s*class="video-airing"[^>]*>([^<]*)</dd>')
 
     
 def compareTeasers(t1, t2):

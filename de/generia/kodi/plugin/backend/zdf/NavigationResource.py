@@ -6,7 +6,7 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 leftNavPattern = getTagPattern('ul', 'left-nav')
-dropdownLinksPattern = compile('<a class="[^"]*dropdown-link[^"]*"[^>]*href="([^"]*)"[^>]*data-title="([^"]*)"')
+dropdownLinksPattern = compile('<a\s*class="[^"]*dropdown-link[^"]*"[^>]*href="([^"]*)"[^>]*data-title="([^"]*)"')
 
 class Rubric(object):
 

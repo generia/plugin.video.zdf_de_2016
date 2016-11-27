@@ -7,7 +7,7 @@ from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
-fallbackTitlePattern = compile('<li class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
+fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
 '''
 <li class="item current" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
     
@@ -21,10 +21,10 @@ fallbackTitlePattern = compile('<li class="item current"[^>]*>[^<]*<a[^>]*>([^<]
 
 listPattern = compile('<[^ ]*>[^>]*class="([^"]*b-cluster m-filter[^"]*|[^"]*b-content-teaser-list[^"]*)"[^>]*>')
 
-sectionTitlePattern = compile('<h2 class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
+sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
 
-clusterTitlePattern = compile('<h2 class="[^"]*cluster-title[^"]*"[^>]*>([^<]*)</h2>')
+clusterTitlePattern = compile('<h2\s*class="[^"]*cluster-title[^"]*"[^>]*>([^<]*)</h2>')
 clusterItemPattern = getTagPattern('article', 'b-cluster-teaser')
 
 class Cluster(object):
@@ -75,12 +75,17 @@ class RubricResource(HtmlResource):
                     listType = 'content'
                     
                 titleMatch = titlePattern.search(self.content, pos)
+                cluster = None
                 if titleMatch is not None:
                     title = stripHtml(titleMatch.group(1))
                     pos = titleMatch.end(0)
-                    
-                cluster = Cluster(title, listType, pos)
-                self.clusters.append(cluster)
+                elif class_.find('x-notitle') != -1:
+                    if len(self.clusters) > 0:
+                        cluster = self.clusters[len(self.clusters)-1]
+
+                if cluster is None:
+                    cluster = Cluster(title, listType, pos)
+                    self.clusters.append(cluster)
                 
                 match = listPattern.search(self.content, pos)
 

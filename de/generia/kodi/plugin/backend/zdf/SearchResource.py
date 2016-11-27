@@ -3,8 +3,8 @@ from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
-resultsPattern = compile('<div class="[^"]*" data-loadmore-size="([^"]*)" data-loadmore-result-count="([^"]*)" data-module="loadmore">')
-loadMorePattern = compile('<a href="([^"]*)"[^>]*class="[^"]*load-more[^"]*"')
+resultsPattern = compile('<div\s*class="[^"]*"\s*data-loadmore-size="([^"]*)"\s*data-loadmore-result-count="([^"]*)"\s*data-module="loadmore">')
+loadMorePattern = compile('<a\s*href="([^"]*)"[^>]*class="[^"]*load-more[^"]*"')
 
 class SearchResource(HtmlResource):
 
