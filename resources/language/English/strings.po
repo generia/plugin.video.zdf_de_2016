@@ -123,3 +123,15 @@ msgstr ""
 msgctxt "#32027"
 msgid "Show tags in title"
 msgstr ""
+
+msgctxt "#32028"
+msgid "Search History Size"
+msgstr ""
+
+msgctxt "#32029"
+msgid "{1} (Search on {0})"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Search History"
+msgstr ""

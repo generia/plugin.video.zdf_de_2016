@@ -39,7 +39,7 @@ class XbmcLog(Log):
         for arg in args:
             part = arg
             if isinstance(arg, basestring):
-                part = arg # arg.encode('ascii', 'ignore')
+                part = arg # arg.decode('utf-8')
             parts.append(part)
         formatMessage = self._getFormatMessage(message)
         msg = self.prefix + formatMessage.format(*parts)
@@ -116,6 +116,7 @@ class Settings(object):
         self.mergeCategoryAndTitle = xbmcplugin.getSetting(handle, 'mergeCategoryAndTitle') == 'true'
         self.loadAllSearchResults = xbmcplugin.getSetting(handle, 'loadAllSearchResults') == 'true'
         self.showOnlyPlayableSearchResults = xbmcplugin.getSetting(handle, 'showOnlyPlayableSearchResults') == 'true'
+        self.searchHistorySize = int(xbmcplugin.getSetting(handle, 'searchHistorySize'))
         self.itemPattern = xbmcplugin.getSetting(handle, 'itemPattern')
         # Labeling
         self.showDateInTitle = xbmcplugin.getSetting(handle, 'showDataInTitle') == 'true'
@@ -143,8 +144,9 @@ xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
 
-context = Context(log, Settings(handle))
-factory = MediathekFactory()
+settings = Settings(handle)
+context = Context(log, settings)
+factory = MediathekFactory(settings)
 pagelet = factory.createPagelet(pageletId, params)
 pagelet.init(context)
 request = XbmcRequest(context, baseUrl, handle, params)

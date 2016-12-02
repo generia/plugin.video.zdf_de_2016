@@ -120,7 +120,15 @@ class Pagelet(object):
         msg = self.addon.getLocalizedString(id)
         msg2 = msg
         if len(args) > 0:
-            msg = msg.format(*args)
+            i = 0
+            for arg in args:
+                s = None
+                if isinstance(arg, basestring):
+                    s = arg.decode('utf-8')
+                else:
+                    s = str(arg)
+                msg = msg.replace('{' + str(i) + '}', s)
+                i += 1
         #self.info("localize string '{}' args='{}' -> '{}' ('{}')", id, len(args), msg, msg2)
         return msg
     

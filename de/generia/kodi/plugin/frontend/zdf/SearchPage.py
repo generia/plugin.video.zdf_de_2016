@@ -15,7 +15,15 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
+from de.generia.kodi.plugin.frontend.zdf.data.SearchHistory import HistoryEntry       
+
+
 class SearchPage(ItemPage):
+    searchHistory = None
+    
+    def __init__(self, searchHistory):
+        super(SearchPage, self).__init__()
+        self.searchHistory = searchHistory
 
     def service(self, request, response):
         apiToken = request.getParam('apiToken')
@@ -48,11 +56,22 @@ class SearchPage(ItemPage):
             self._progress.create(self._(32020), msg)
             self._progress.update(0, msg)
             self._loadResults(request, response, apiToken, pages, page, query)
+            
+            # add search history entry
+            self._saveQuery(query)
+            
         except:
-            self.warn("Timer - loading results ... expeption")            
+            self.warn("Timer - loading results ... exception")            
         finally:
             self.info("Timer - loading results ... done. [{} ms]", self.context.log.stop(start))
             self._progress.close();
+
+    def _saveQuery(self, query):
+        if self.results > 0:
+            contentTypes = None
+            if 'contentTypes' in query:
+                contentTypes = query['contentTypes']
+            self.searchHistory.addEntry(HistoryEntry(query['q'].strip(), contentTypes))
 
     def _loadResults(self, request, response, apiToken, pages, page, query):
         queryParams = urllib.urlencode(query)
@@ -81,6 +100,7 @@ class SearchPage(ItemPage):
             
         self._progress.update(percent=100)
         self.info("added '{}' result-items.", self.results)
+
 
     def _addItems(self, response, teasers, apiToken):
         self.debug("Timer - creating list items  ...")

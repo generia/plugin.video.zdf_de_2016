@@ -141,3 +141,15 @@ msgstr "Zeige abspielbar '(>)' im Titel"
 msgctxt "#32027"
 msgid "Show tags in title"
 msgstr "Zeige Tags im Titel"
+
+msgctxt "#32028"
+msgid "Search History Size"
+msgstr "Größe der Such-Historie"
+
+msgctxt "#32029"
+msgid "{1} (Search on {0})"
+msgstr "{1} (Suche vom {0})"
+
+msgctxt "#32030"
+msgid "Search History"
+msgstr "Suche - letzte Abfragen"
