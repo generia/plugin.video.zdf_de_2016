@@ -35,12 +35,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#32001"
-msgid "Search - full episodes"
-msgstr "Suche - ganze Sendungen"
+msgid "Full episodes"
+msgstr "Ganze Sendungen"
 
 msgctxt "#32002"
-msgid "Search - fulltext"
-msgstr "Suche - Volltext"
+msgid "Fulltext Search"
+msgstr "Volltext Suche"
 
 msgctxt "#32003"
 msgid "Rubrics"
@@ -152,4 +152,20 @@ msgstr "{1} (Suche vom {0})"
 
 msgctxt "#32030"
 msgid "Search History"
-msgstr "Suche - letzte Abfragen"
+msgstr "Letzte Abfragen"
+
+msgctxt "#32031"
+msgid "Most Liked"
+msgstr "Bestbewertet"
+
+msgctxt "#32032"
+msgid "Most Watched"
+msgstr "Meist gesehen"
+
+msgctxt "#32033"
+msgid "Episodes A-Z"
+msgstr "Sendungen A-Z"
+
+msgctxt "#32034"
+msgid "Approved for Accessibility"
+msgstr "Barrierearm"

@@ -15,7 +15,7 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
-from de.generia.kodi.plugin.frontend.zdf.data.SearchHistory import HistoryEntry       
+from de.generia.kodi.plugin.frontend.zdf.search.SearchHistory import HistoryEntry       
 
 
 class SearchPage(ItemPage):

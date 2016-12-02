@@ -17,11 +17,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgctxt "#32001"
-msgid "Search - full episodes"
+msgid "Full episodes"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Search - fulltext"
+msgid "Fulltext Search"
 msgstr ""
 
 msgctxt "#32003"
@@ -134,4 +134,20 @@ msgstr ""
 
 msgctxt "#32030"
 msgid "Search History"
+msgstr ""
+
+msgctxt "#32031"
+msgid "Most Liked"
+msgstr ""
+
+msgctxt "#32032"
+msgid "Most Watched"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Episodes A-Z"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Approved for Accessibility"
 msgstr ""

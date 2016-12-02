@@ -13,13 +13,14 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet
 from de.generia.kodi.plugin.frontend.base.Pagelet import PageletFactory        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
-from de.generia.kodi.plugin.frontend.zdf.SearchPage import SearchPage       
-from de.generia.kodi.plugin.frontend.zdf.SearchHistoryPage import SearchHistoryPage       
+from de.generia.kodi.plugin.frontend.zdf.search.SearchPage import SearchPage       
+from de.generia.kodi.plugin.frontend.zdf.search.SearchMenuPage import SearchMenuPage       
+from de.generia.kodi.plugin.frontend.zdf.search.SearchHistoryPage import SearchHistoryPage       
 from de.generia.kodi.plugin.frontend.zdf.RubricsPage import RubricsPage       
 from de.generia.kodi.plugin.frontend.zdf.RubricPage import RubricPage       
 from de.generia.kodi.plugin.frontend.zdf.PlayVideo import PlayVideo        
 
-from de.generia.kodi.plugin.frontend.zdf.data.SearchHistory import SearchHistory       
+from de.generia.kodi.plugin.frontend.zdf.search.SearchHistory import SearchHistory       
 
 
 class MediathekFactory(PageletFactory):
@@ -32,6 +33,8 @@ class MediathekFactory(PageletFactory):
     def createPagelet(self, pageletId, params):
         if pageletId == 'SearchPage':
             return SearchPage(self._createSearchHistory())
+        if pageletId == 'SearchMenuPage':
+            return SearchMenuPage()
         if pageletId == 'SearchHistoryPage':
             return SearchHistoryPage(self._createSearchHistory())
         if pageletId == 'RubricsPage':
@@ -56,8 +59,11 @@ class Mediathek(Pagelet):
         self._parse(configuration)
         apiToken = configuration.apiToken
 
-        response.addFolder(self._(32030), Action('SearchHistoryPage', {'apiToken': apiToken }))
-        response.addFolder(self._(32001), Action('SearchPage', {'apiToken': apiToken, 'contentTypes':'episode'}))
-        response.addFolder(self._(32002), Action('SearchPage', {'apiToken': apiToken}))
+        response.addFolder(self._(32005), Action('SearchMenuPage', {'apiToken': apiToken }))
 
         response.addFolder(self._(32003), Action('RubricsPage', {'apiToken': apiToken}))
+
+        response.addFolder(self._(32031), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/bestbewertet'}))
+        response.addFolder(self._(32032), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/meist-gesehen'}))
+        response.addFolder(self._(32033), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/sendungen-a-z'}))
+        response.addFolder(self._(32034), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/barrierefreiheit-im-zdf'}))
