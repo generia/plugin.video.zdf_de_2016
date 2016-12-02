@@ -1,5 +1,5 @@
 from datetime import datetime
-import xbmc
+#import xbmc
 
 DATE_FORMAT = "%d.%m.%Y"
 
@@ -41,12 +41,8 @@ class SearchHistory(object):
                 found = True
                 break
         
-            
-        #print "addEntry: size=" + str(len(entries)) + ", " + entry.query
-        #xbmc.log("addEntry: " + str(len(entries)) + " > " + str(self.searchHistorySize), level=xbmc.LOGNOTICE)
         if len(entries) > self.searchHistorySize-1:
             entries = entries[0:self.searchHistorySize-1]
-            #xbmc.log("addEntry-2: " + str(len(entries)) + " ?= " + str(self.searchHistorySize), level=xbmc.LOGNOTICE)
 
         if not found:
             entries.append(entry)
@@ -77,11 +73,11 @@ class SearchHistory(object):
         date = line[0:i]
         contentTypes = line[i+1:j]
         query = line[j+1:len(line)-1]
-        xbmc.log("_parseEntry: " + str(date) + "-" + query, level=xbmc.LOGNOTICE)
+        #xbmc.log("_parseEntry: " + str(date) + "-" + query, level=xbmc.LOGNOTICE)
         return HistoryEntry(query, contentTypes, date)  
 
     def _saveEntries(self, entries):
-        xbmc.log("_saveEntries: " + str(len(entries)), level=xbmc.LOGNOTICE)
+        #xbmc.log("_saveEntries: " + str(len(entries)), level=xbmc.LOGNOTICE)
                  
         file = open(self.storeFile, "w")
         for entry in entries:
