@@ -18,6 +18,7 @@ from de.generia.kodi.plugin.frontend.zdf.search.SearchMenuPage import SearchMenu
 from de.generia.kodi.plugin.frontend.zdf.search.SearchHistoryPage import SearchHistoryPage       
 from de.generia.kodi.plugin.frontend.zdf.RubricsPage import RubricsPage       
 from de.generia.kodi.plugin.frontend.zdf.RubricPage import RubricPage       
+from de.generia.kodi.plugin.frontend.zdf.LiveTvPage import LiveTvPage       
 from de.generia.kodi.plugin.frontend.zdf.PlayVideo import PlayVideo        
 
 from de.generia.kodi.plugin.frontend.zdf.search.SearchHistory import SearchHistory       
@@ -41,6 +42,8 @@ class MediathekFactory(PageletFactory):
             return RubricsPage()
         if pageletId == 'RubricPage':
             return RubricPage()
+        if pageletId == 'LiveTvPage':
+            return LiveTvPage()
         if pageletId == 'PlayVideo':
             return PlayVideo()
         
@@ -67,3 +70,5 @@ class Mediathek(Pagelet):
         response.addFolder(self._(32032), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/meist-gesehen'}))
         response.addFolder(self._(32033), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/sendungen-a-z'}))
         response.addFolder(self._(32034), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/barrierefreiheit-im-zdf'}))
+
+        response.addFolder(self._(32035), Action('LiveTvPage', {'apiToken': apiToken}))

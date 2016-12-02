@@ -8,18 +8,18 @@ class StreamInfoResource(ApiResource):
                     
     def parse(self):
         super(StreamInfoResource, self).parse()
-        priorityList = self.content['priorityList']
+        priorityList = self.content.get('priorityList')
         priority = priorityList[0]
-        formitaeten = priority['formitaeten']
+        formitaeten = priority.get('formitaeten')
         formitaet = formitaeten[0]
-        self.mimeType = formitaet['mimeType']
-        qualities = formitaet['qualities']
+        self.mimeType = formitaet.get('mimeType')
+        qualities = formitaet.get('qualities')
         quality = qualities[0]
-        self.hd = quality['hd']
-        self.quality = quality['quality']
-        audio = quality['audio']
-        tracks = audio['tracks']
+        self.hd = quality.get('hd')
+        self.quality = quality.get('quality')
+        audio = quality.get('audio')
+        tracks = audio.get('tracks')
         track = tracks[0]
         
-        self.streamUrl = track['uri']
+        self.streamUrl = track.get('uri')
 

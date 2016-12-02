@@ -169,3 +169,8 @@ msgstr "Sendungen A-Z"
 msgctxt "#32034"
 msgid "Approved for Accessibility"
 msgstr "Barrierearm"
+
+msgctxt "#32035"
+msgid "Live-TV"
+msgstr "Live-TV"
+

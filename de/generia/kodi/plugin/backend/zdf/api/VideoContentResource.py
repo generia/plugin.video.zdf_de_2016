@@ -34,4 +34,7 @@ class VideoContentResource(ApiResource):
             mainVideoContent = self.content.get('mainVideoContent')
             target = mainVideoContent.get('http://zdf.de/rels/target')
             self.streamInfoUrl = self.apiBaseUrl + target.get('http://zdf.de/rels/streams/ptmd')
-            self.duration = int(target.get('duration'))
+            duration = target.get('duration')
+            self.duration = None
+            if duration is not None:
+                self.duration = int(duration)

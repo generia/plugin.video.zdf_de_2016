@@ -151,3 +151,7 @@ msgstr ""
 msgctxt "#32034"
 msgid "Approved for Accessibility"
 msgstr ""
+
+msgctxt "#32035"
+msgid "Live-TV"
+msgstr ""

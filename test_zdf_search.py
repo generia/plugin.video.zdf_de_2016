@@ -7,6 +7,7 @@ from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 from de.generia.kodi.plugin.backend.zdf.SearchResource import SearchResource        
 from de.generia.kodi.plugin.backend.zdf.NavigationResource import NavigationResource        
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource        
+from de.generia.kodi.plugin.backend.zdf.LiveTvResource import LiveTvResource        
 from de.generia.kodi.plugin.backend.zdf.ConfigurationResource import ConfigurationResource
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
@@ -57,7 +58,12 @@ navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
+liveTvResource = LiveTvResource(baseUrl + '/live-tv')
+liveTvResource.parse()
+for teaser in liveTvResource.teasers:
+    print "Teaser: " + str(teaser)
 
+'''
 #rubric = '/krimi'
 rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
 rubricResource = RubricResource(baseUrl + rubric)
@@ -78,7 +84,7 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-
+'''
 '''
 html = getUrl(searchUrl)
 

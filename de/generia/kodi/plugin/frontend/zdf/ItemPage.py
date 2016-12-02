@@ -43,8 +43,14 @@ class ItemPage(Pagelet):
             title = teaser.date + " " + title
            
         isFolder = False
+        #self.log.info("_createItem: title='{}' contentName='{}' playable='{}'", title, teaser.contentName, teaser.playable)
         if teaser.contentName is not None and teaser.playable:
-            action = Action(pagelet='PlayVideo', params={'apiToken': apiToken, 'contentName': teaser.contentName, 'title': title, 'date': teaser.date, 'genre': genre})
+            params = {'apiToken': apiToken, 'contentName': teaser.contentName, 'title': title}
+            if teaser.date is not None:
+                params['date'] = teaser.date
+            if genre is not None:
+                params['genre'] = genre
+            action = Action(pagelet='PlayVideo', params=params)
             isFolder = False
         else:   
             action = Action(pagelet='RubricPage', params={'apiToken': apiToken, 'rubricUrl': teaser.url})
