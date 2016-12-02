@@ -174,3 +174,7 @@ msgctxt "#32035"
 msgid "Live-TV"
 msgstr "Live-TV"
 
+msgctxt "#32036"
+msgid "Missed a Show"
+msgstr "Sendung verpasst"
+
