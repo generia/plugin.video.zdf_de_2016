@@ -76,6 +76,7 @@ class XbmcResponse(Response):
         infoLabels['sorttitle'] = title
         infoLabels['genre'] = item.genre
         infoLabels['plot'] = item.text
+        infoLabels['mediatype'] = 'video'
 
         date = item.date
         if date is not None and date != "":

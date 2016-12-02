@@ -58,7 +58,8 @@ class PlayVideo(Pagelet):
                 infoLabels['tvshowtitle'] = title
                 infoLabels['tagline'] = text
                 infoLabels['duration'] = videoContent.duration
-        
+                infoLabels['mediatype'] = 'video'
+
                 if date is not None and date != "":
                     infoLabels['date'] = date
         

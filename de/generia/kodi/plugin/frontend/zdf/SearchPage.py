@@ -60,8 +60,8 @@ class SearchPage(ItemPage):
             # add search history entry
             self._saveQuery(query)
             
-        except:
-            self.warn("Timer - loading results ... exception")            
+        #except:
+        #    self.warn("Timer - loading results ... exception")            
         finally:
             self.info("Timer - loading results ... done. [{} ms]", self.context.log.stop(start))
             self._progress.close();
