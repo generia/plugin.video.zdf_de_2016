@@ -3,6 +3,7 @@ from datetime import datetime
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
 from de.generia.kodi.plugin.backend.zdf.Regex import getTag
+from de.generia.kodi.plugin.backend.zdf.Regex import stripTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 teaserPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -113,6 +114,8 @@ class Teaser(object):
             label = labelTags[i:j]
             label = label.replace('<strong>', '')
             label = label.replace('</strong>', '')
+            label = stripTag('abbr', label)
+            label = stripTag('span', label)
             label = label.strip()
 
         self.label = stripHtml(label)

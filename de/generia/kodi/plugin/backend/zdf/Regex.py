@@ -15,3 +15,6 @@ def getTag(tag, string, match):
 
 def compile(regex):
     return re.compile(regex, re.DOTALL)
+
+def stripTag(tag, string):
+    return re.sub(r'<' + tag + '[^>]*>[^<]*</' + tag + '>', '', string)

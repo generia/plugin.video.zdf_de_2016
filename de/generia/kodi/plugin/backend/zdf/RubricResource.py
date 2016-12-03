@@ -13,7 +13,7 @@ moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)<span')
 moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
 
-listPattern = compile('class="([^"]*b-cluster m-filter[^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-content-module[^"]*)"[^>]*>')
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-content-module[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -133,7 +133,7 @@ class RubricResource(HtmlResource):
     
     def _parseClusterTeasers(self, cluster):
         itemPattern = sectionItemPattern
-        if self.listType == 'cluster':
+        if cluster.listType == 'cluster':
             itemPattern = clusterItemPattern
         pos = cluster.listStart
         itemMatch = itemPattern.search(self.content, pos)

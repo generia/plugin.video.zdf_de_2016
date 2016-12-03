@@ -58,14 +58,16 @@ navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
+'''
 liveTvResource = LiveTvResource(baseUrl + '/live-tv')
 liveTvResource.parse()
 for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
-
 '''
+
 #rubric = '/krimi'
-rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
+rubric = '/dokumentation/zdf-history'
+#rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
@@ -84,7 +86,7 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-'''
+
 '''
 html = getUrl(searchUrl)
 
