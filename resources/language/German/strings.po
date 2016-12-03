@@ -152,7 +152,7 @@ msgstr "{1} (Suche vom {0})"
 
 msgctxt "#32030"
 msgid "Search History"
-msgstr "Letzte Abfragen"
+msgstr "Gespeicherte Suchen"
 
 msgctxt "#32031"
 msgid "Most Liked"

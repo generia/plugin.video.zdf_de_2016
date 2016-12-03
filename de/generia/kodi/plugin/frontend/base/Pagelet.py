@@ -58,8 +58,8 @@ class Response(object):
     def addItem(self, item):
         pass
     
-    def addFolder(self, title, action):
-        item = Item(title, action=action, image='DefaultFolder.png', isFolder=True)
+    def addFolder(self, title, action, image='DefaultFolder.png', text=None, genre=None, date=None):
+        item = Item(title, action=action, image=image, text=text, genre=genre, date=date, isFolder=True)
         self.addItem(item);
         
     def sendError(self, message, action):

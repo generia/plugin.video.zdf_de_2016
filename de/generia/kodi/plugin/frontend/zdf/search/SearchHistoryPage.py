@@ -31,4 +31,4 @@ class SearchHistoryPage(AbstractPage):
             if entry.contentTypes is not None:
                 params['contentTypes'] = entry.contentTypes
                 
-            response.addFolder(self._(32029, entry.date, entry.query), Action('SearchPage', params))
+            response.addFolder(self._(32029, entry.date, entry.query), Action('SearchPage', params), date=entry.date)
