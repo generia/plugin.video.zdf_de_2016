@@ -1,6 +1,8 @@
 1.0.0
 - Initial version after relaunch of zdf.de end of October 2016
 1.0.1
+- added rubrics: Live-TV, Shows A-Z
+- added search history
 - re-shaped parsing after ZDF website update (fix for broken search)
 - added parsing of video links in module-content elements 
 - re-worked video player launching (based on "setResolvedUrl()")
