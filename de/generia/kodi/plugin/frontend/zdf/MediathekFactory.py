@@ -4,7 +4,7 @@ import xbmc
 
 from xbmcaddon import Addon
 
-from de.generia.kodi.plugin.frontend.base.Pagelet import PageletFactory        
+from de.generia.kodi.plugin.frontend.base.PageletFactory import PageletFactory        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 from de.generia.kodi.plugin.frontend.zdf.Mediathek import Mediathek

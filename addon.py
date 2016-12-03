@@ -5,7 +5,7 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-from de.generia.kodi.plugin.frontend.base.Pagelet import Log
+from de.generia.kodi.plugin.frontend.base.Log import Log
 from de.generia.kodi.plugin.frontend.base.Pagelet import Context
 from de.generia.kodi.plugin.frontend.base.Pagelet import Request
 from de.generia.kodi.plugin.frontend.base.Pagelet import Response
