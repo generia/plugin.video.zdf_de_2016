@@ -160,6 +160,6 @@ class SearchPage(AbstractPage):
         keyboard.doModal()
         text = None
         if keyboard.isConfirmed() and keyboard.getText():
-            text = keyboard.getText().replace(" ", "+")
+            text = keyboard.getText()
         return text
 
