@@ -9,10 +9,10 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 class RubricsPage(AbstractPage):
 
     excludedRubricUrls = [
-        #'/sendungen-a-z',
-        #'/bestbewertet',
-        #'/meist-gesehen',
-        '/barrierefreiheit-im-zdf'
+        '/sendungen-a-z',
+        '/bestbewertet',
+        '/meist-gesehen',
+        #'/barrierefreiheit-im-zdf'
     ]
     
     def service(self, request, response):
