@@ -1,10 +1,10 @@
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 
+from de.generia.kodi.plugin.frontend.zdf.AbstractPage import AbstractPage
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
-from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
 
-class ShowsAzPage(ItemPage):
+class ShowsAzPage(AbstractPage):
 
     def service(self, request, response):
         apiToken = request.getParam('apiToken')

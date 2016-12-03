@@ -12,10 +12,10 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Item
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
+from de.generia.kodi.plugin.frontend.zdf.AbstractPage import AbstractPage
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
-from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
-class SearchHistoryPage(ItemPage):
+class SearchHistoryPage(AbstractPage):
 
     def __init__(self, searchHistory):
         super(SearchHistoryPage, self).__init__()

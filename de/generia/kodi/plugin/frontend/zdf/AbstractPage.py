@@ -5,7 +5,7 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 
-class ItemPage(Pagelet):
+class AbstractPage(Pagelet):
 
 
     def _createItem(self, teaser, apiToken):

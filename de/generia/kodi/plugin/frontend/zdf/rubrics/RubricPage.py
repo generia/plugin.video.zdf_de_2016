@@ -3,13 +3,12 @@ from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoCon
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Item        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
-from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
+from de.generia.kodi.plugin.frontend.zdf.AbstractPage import AbstractPage
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
-from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 
 
-class RubricPage(ItemPage):
+class RubricPage(AbstractPage):
 
     def service(self, request, response):
         apiToken = request.getParam('apiToken')

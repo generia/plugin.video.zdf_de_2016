@@ -11,7 +11,7 @@ from de.generia.kodi.plugin.frontend.base.Pagelet import Request
 from de.generia.kodi.plugin.frontend.base.Pagelet import Response
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action
 
-from de.generia.kodi.plugin.frontend.zdf.Mediathek import MediathekFactory
+from de.generia.kodi.plugin.frontend.zdf.MediathekFactory import MediathekFactory
 
 
 class XbmcLog(Log):
