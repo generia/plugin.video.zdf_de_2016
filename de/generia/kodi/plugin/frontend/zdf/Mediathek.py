@@ -72,7 +72,7 @@ class Mediathek(Pagelet):
         response.addFolder(self._(32031), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/bestbewertet'}))
         response.addFolder(self._(32032), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/meist-gesehen'}))
         response.addFolder(self._(32037), Action('ShowsAzPage', {'apiToken': apiToken}))
-        response.addFolder(self._(32034), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/barrierefreiheit-im-zdf'}))
+        #response.addFolder(self._(32034), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/barrierefreiheit-im-zdf'}))
         response.addFolder(self._(32036), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/sendung-verpasst'}))
 
         response.addFolder(self._(32035), Action('LiveTvPage', {'apiToken': apiToken}))

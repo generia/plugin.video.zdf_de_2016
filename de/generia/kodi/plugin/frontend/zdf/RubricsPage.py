@@ -9,9 +9,9 @@ from de.generia.kodi.plugin.frontend.zdf.ItemPage import ItemPage
 class RubricsPage(ItemPage):
 
     excludedRubricUrls = [
-        '/sendungen-a-z',
-        '/bestbewertet',
-        '/meist-gesehen',
+        #'/sendungen-a-z',
+        #'/bestbewertet',
+        #'/meist-gesehen',
         '/barrierefreiheit-im-zdf'
     ]
     
