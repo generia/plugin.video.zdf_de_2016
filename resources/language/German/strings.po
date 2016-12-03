@@ -178,3 +178,10 @@ msgctxt "#32036"
 msgid "Missed a Show"
 msgstr "Sendung verpasst"
 
+msgctxt "#32037"
+msgid "Shows A-Z"
+msgstr "Sendungen A-Z"
+
+msgctxt "#32038"
+msgid "Shows with {0}"
+msgstr "Sendungen mit {0}"

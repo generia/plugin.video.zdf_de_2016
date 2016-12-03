@@ -19,6 +19,7 @@ from de.generia.kodi.plugin.frontend.zdf.search.SearchHistoryPage import SearchH
 from de.generia.kodi.plugin.frontend.zdf.RubricsPage import RubricsPage       
 from de.generia.kodi.plugin.frontend.zdf.RubricPage import RubricPage       
 from de.generia.kodi.plugin.frontend.zdf.LiveTvPage import LiveTvPage       
+from de.generia.kodi.plugin.frontend.zdf.ShowsAzPage import ShowsAzPage       
 from de.generia.kodi.plugin.frontend.zdf.PlayVideo import PlayVideo        
 
 from de.generia.kodi.plugin.frontend.zdf.search.SearchHistory import SearchHistory       
@@ -44,6 +45,8 @@ class MediathekFactory(PageletFactory):
             return RubricPage()
         if pageletId == 'LiveTvPage':
             return LiveTvPage()
+        if pageletId == 'ShowsAzPage':
+            return ShowsAzPage()
         if pageletId == 'PlayVideo':
             return PlayVideo()
         
@@ -62,13 +65,13 @@ class Mediathek(Pagelet):
         self._parse(configuration)
         apiToken = configuration.apiToken
 
-        response.addFolder(self._(32005), Action('SearchMenuPage', {'apiToken': apiToken }))
+        response.addFolder(self._(32005), Action('SearchMenuPage', {'apiToken': apiToken}))
 
         response.addFolder(self._(32003), Action('RubricsPage', {'apiToken': apiToken}))
 
         response.addFolder(self._(32031), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/bestbewertet'}))
         response.addFolder(self._(32032), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/meist-gesehen'}))
-        response.addFolder(self._(32033), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/sendungen-a-z'}))
+        response.addFolder(self._(32037), Action('ShowsAzPage', {'apiToken': apiToken}))
         response.addFolder(self._(32034), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/barrierefreiheit-im-zdf'}))
         response.addFolder(self._(32036), Action('RubricPage', {'apiToken': apiToken, 'rubricUrl': '/sendung-verpasst'}))
 
