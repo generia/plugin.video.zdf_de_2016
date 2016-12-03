@@ -11,7 +11,7 @@ class ShowsAzPage(ItemPage):
 
         rubricBaseUrl = '/sendungen-a-z?group='
         groups = []
-        for i in range (0, 25):
+        for i in range (0, 26):
             group = chr(ord('a') + i)
             groups.append(group)
         groups.append('0 - 9')
