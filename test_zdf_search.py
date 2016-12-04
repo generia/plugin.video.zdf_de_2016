@@ -26,7 +26,7 @@ def getUrl(url):
 baseUrl = "https://www.zdf.de"
 configUrl = baseUrl + '/ZDFplayer/configs/zdf/zdf2016/configuration.json'
 
-query = {'q': "Soko Stuttgart"}
+query = {'q': "Die Chefin"}
 queryParams = urllib.urlencode(query)
 searchUrl = baseUrl + "/suche?" + queryParams
 #searchUrl = "http://www.cloudev.de/"
@@ -35,7 +35,7 @@ configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
 '''
-'''
+
 searchPage = SearchResource(searchUrl)
 searchPage.parse()
 print str(searchPage.resultsPerPage) + " - #" + str(searchPage.results)
@@ -43,7 +43,7 @@ for teaser in searchPage.teasers:
     print "- " + str(teaser)
 if searchPage.moreUrl is not None:
     print "load-more: " + searchPage.moreUrl
-'''
+
 '''
 teaser = searchPage.teasers[1]
 videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
@@ -64,7 +64,7 @@ liveTvResource.parse()
 for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
 '''
-
+'''
 #rubric = '/krimi'
 rubric = '/dokumentation/zdf-history'
 #rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
@@ -86,7 +86,7 @@ for cluster in rubricResource.clusters:
     print cluster
     for teaser in cluster.teasers:
         print teaser
-
+'''
 '''
 html = getUrl(searchUrl)
 

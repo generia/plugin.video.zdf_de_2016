@@ -35,6 +35,11 @@ class SearchPage(AbstractPage):
         if 'pages' in query:
             del query['pages']
         
+        query['from'] = ''
+        query['to'] = ''
+        query['sender'] = 'alle Sender'
+        query['attrs'] = ''
+        
         if 'q' not in query:
             self.info("Timer - getting search-string from keyboard ...")
             start = self.context.log.start()
@@ -113,7 +118,8 @@ class SearchPage(AbstractPage):
         self.debug("Timer - creating list items ... done. [{} ms]", self.context.log.stop(start))
 
     def _addMoreResults(self, response, moreUrl, apiToken, pages, page):
-        while page < pages and not self._progress.iscanceled():
+
+        while moreUrl is not None and page < pages and not self._progress.iscanceled():
             moreUrl = moreUrl.replace('&#x3D;', '=')
             moreUrl = moreUrl.replace('&amp;', '&')
 

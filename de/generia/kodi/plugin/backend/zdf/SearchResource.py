@@ -14,14 +14,22 @@ class SearchResource(HtmlResource):
     def parse(self):
         super(SearchResource, self).parse()
         
+        self.teasers = []
+        self.resultsPerPage = 0
+        self.results = 0
+
         pos = 0
         resultsMatch = resultsPattern.search(self.content, pos)
         if resultsMatch is not None:
-            self.results = int(resultsMatch.group(2))
-            self.resultsPerPage = int(resultsMatch.group(1))
+            loadMoreSize = resultsMatch.group(1)
+            if loadMoreSize is not None and loadMoreSize != '':
+                self.resultsPerPage = int(loadMoreSize)
+            loadMoreCount = resultsMatch.group(2)
+            if loadMoreCount is None or loadMoreCount == '':
+                return;
+            self.results = int(loadMoreCount)
             pos = resultsMatch.end(0)
             
-        self.teasers = []
         prevPos = 0
         while pos != -1:
             teaser = Teaser()

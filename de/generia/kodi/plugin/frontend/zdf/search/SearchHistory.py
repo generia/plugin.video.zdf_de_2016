@@ -73,6 +73,9 @@ class SearchHistory(object):
         date = line[0:i]
         contentTypes = line[i+1:j]
         query = line[j+1:len(line)-1]
+        
+        if contentTypes == 'None':
+            contentTypes = None
         #xbmc.log("_parseEntry: " + str(date) + "-" + query, level=xbmc.LOGNOTICE)
         return HistoryEntry(query, contentTypes, date)  
 
