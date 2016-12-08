@@ -167,3 +167,11 @@ msgstr ""
 msgctxt "#32038"
 msgid "Shows with {0}"
 msgstr ""
+
+msgctxt "#32039"
+msgid "Error"
+msgstr ""
+
+msgctxt "#32040"
+msgid "Info"
+msgstr ""

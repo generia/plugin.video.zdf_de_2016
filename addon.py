@@ -57,6 +57,13 @@ class XbmcLog(Log):
     def error(self, message, *args):
         self._log(xbmc.LOGERROR, message, *args)
 
+class XbmcContext(Context):
+    def __init__(self, log, settings):
+        super(XbmcContext, self).__init__(log, settings)
+
+    def getLocalizedString(self, id):
+        return self.addon.getLocalizedString(id)    
+
 class XbmcRequest(Request):
     def __init__(self, context, baseUrl, handle, params):
         super(XbmcRequest, self).__init__(context, baseUrl, handle, params)
@@ -96,10 +103,10 @@ class XbmcResponse(Response):
         xbmcplugin.endOfDirectory(self.handle)
         
     def sendError(self, message, action=Action()):
-        self._sendMessage(xbmcgui.NOTIFICATION_ERROR, "Error", message, action)
+        self._sendMessage(xbmcgui.NOTIFICATION_ERROR, self.context._(32039), message, action)
         
     def sendInfo(self, message, action=Action()):
-        self._sendMessage(xbmcgui.NOTIFICATION_INFO, "Info", message, action)
+        self._sendMessage(xbmcgui.NOTIFICATION_INFO, self.context._(32040), message, action)
         
     def _sendMessage(self, level, caption, message, action=Action()):
         dialog = xbmcgui.Dialog()
@@ -145,7 +152,7 @@ xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
 
 settings = Settings(handle)
-context = Context(log, settings)
+context = XbmcContext(log, settings)
 factory = MediathekFactory(settings)
 pagelet = factory.createPagelet(pageletId, params)
 pagelet.init(context)

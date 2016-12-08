@@ -7,9 +7,30 @@ class Context(object):
     def __init__(self, log, settings):
         self.log = log
         self.settings = settings
-    
+        self.addon = Addon()
+
     def getLog(self):
         return self.log
+    
+    def _(self, id, *args):
+        msg = self.getLocalizedString(id)
+        msg2 = msg
+        if len(args) > 0:
+            i = 0
+            for arg in args:
+                s = None
+                if isinstance(arg, basestring):
+                    s = arg.decode('utf-8')
+                else:
+                    s = str(arg)
+                msg = msg.replace('{' + str(i) + '}', s)
+                i += 1
+        #self.info("localize string '{}' args='{}' -> '{}' ('{}')", id, len(args), msg, msg2)
+        return msg
+    
+    def getLocalizedString(self, id):
+        return id
+    
     
 class Request(object):
     def __init__(self, context, baseUrl, handle, params):
@@ -91,19 +112,7 @@ class Pagelet(object):
         pass
         
     def _(self, id, *args):
-        msg = self.addon.getLocalizedString(id)
-        msg2 = msg
-        if len(args) > 0:
-            i = 0
-            for arg in args:
-                s = None
-                if isinstance(arg, basestring):
-                    s = arg.decode('utf-8')
-                else:
-                    s = str(arg)
-                msg = msg.replace('{' + str(i) + '}', s)
-                i += 1
-        #self.info("localize string '{}' args='{}' -> '{}' ('{}')", id, len(args), msg, msg2)
+        msg = self.context._(id, *args)
         return msg
     
     def _parse(self, resource):

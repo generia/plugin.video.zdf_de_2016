@@ -185,3 +185,11 @@ msgstr "Sendungen A-Z"
 msgctxt "#32038"
 msgid "Shows with {0}"
 msgstr "Sendungen mit {0}"
+
+msgctxt "#32039"
+msgid "Error"
+msgstr "Fehler"
+
+msgctxt "#32040"
+msgid "Info"
+msgstr "Hinweis"
