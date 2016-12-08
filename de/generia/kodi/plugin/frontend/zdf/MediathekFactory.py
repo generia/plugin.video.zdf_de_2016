@@ -29,13 +29,13 @@ class MediathekFactory(PageletFactory):
         super(MediathekFactory, self).__init__(log)
         self.settings = settings
         
-    def createPagelet(self, pageletId, params):
+    def createPagelet(self, context, pageletId, params):
         if pageletId == 'SearchPage':
-            return SearchPage(self._createSearchHistory())
+            return SearchPage(self._createSearchHistory(context))
         if pageletId == 'SearchMenuPage':
             return SearchMenuPage()
         if pageletId == 'SearchHistoryPage':
-            return SearchHistoryPage(self._createSearchHistory())
+            return SearchHistoryPage(self._createSearchHistory(context))
         if pageletId == 'RubricsPage':
             return RubricsPage()
         if pageletId == 'RubricPage':
@@ -49,8 +49,7 @@ class MediathekFactory(PageletFactory):
         
         return Mediathek()
         
-    def _createSearchHistory(self):
-        addon = Addon()
-        profileDir = xbmc.translatePath(addon.getAddonInfo('profile'))
+    def _createSearchHistory(self, context):
+        profileDir = context.getProfileDir()
         storeFile  = os.path.join(profileDir, 'searchHistory.txt') 
         return SearchHistory(self.log, storeFile, self.settings.searchHistorySize)

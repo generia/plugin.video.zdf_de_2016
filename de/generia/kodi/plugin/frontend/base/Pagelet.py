@@ -1,13 +1,10 @@
 import urllib
 
-from xbmcaddon import Addon
-
 
 class Context(object):
     def __init__(self, log, settings):
         self.log = log
         self.settings = settings
-        self.addon = Addon()
 
     def getLog(self):
         return self.log
@@ -30,6 +27,9 @@ class Context(object):
     
     def getLocalizedString(self, id):
         return id
+    
+    def getProfileDir(self):
+        return '.'
     
     
 class Request(object):
@@ -104,7 +104,6 @@ class Pagelet(object):
          
     def init(self, context):
         self.context = context
-        self.addon = Addon()
         self.log = context.log
         self.settings = context.settings
 

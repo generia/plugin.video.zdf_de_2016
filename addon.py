@@ -5,6 +5,8 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
+from xbmcaddon import Addon
+
 from de.generia.kodi.plugin.frontend.base.Log import Log
 from de.generia.kodi.plugin.frontend.base.Pagelet import Context
 from de.generia.kodi.plugin.frontend.base.Pagelet import Request
@@ -60,9 +62,14 @@ class XbmcLog(Log):
 class XbmcContext(Context):
     def __init__(self, log, settings):
         super(XbmcContext, self).__init__(log, settings)
+        self.addon = Addon()
 
     def getLocalizedString(self, id):
         return self.addon.getLocalizedString(id)    
+    
+    def getProfileDir(self):
+        profileDir = xbmc.translatePath(self.addon.getAddonInfo('profile'))
+        return profileDir
 
 class XbmcRequest(Request):
     def __init__(self, context, baseUrl, handle, params):
@@ -154,7 +161,7 @@ xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
 settings = Settings(handle)
 context = XbmcContext(log, settings)
 factory = MediathekFactory(log, settings)
-pagelet = factory.createPagelet(pageletId, params)
+pagelet = factory.createPagelet(context, pageletId, params)
 pagelet.init(context)
 request = XbmcRequest(context, baseUrl, handle, params)
 response = XbmcResponse(context, baseUrl, handle)
