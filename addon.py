@@ -153,7 +153,7 @@ xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
 
 settings = Settings(handle)
 context = XbmcContext(log, settings)
-factory = MediathekFactory(settings)
+factory = MediathekFactory(log, settings)
 pagelet = factory.createPagelet(pageletId, params)
 pagelet.init(context)
 request = XbmcRequest(context, baseUrl, handle, params)

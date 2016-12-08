@@ -1,7 +1,7 @@
 from datetime import datetime
-#import xbmc
 
 DATE_FORMAT = "%d.%m.%Y"
+LOG_PREFIX = '[SearchHistory] - '
 
 class HistoryEntry(object):
     date = None
@@ -21,7 +21,8 @@ class SearchHistory(object):
     storeFile = None
     searchHistorySize = None
     
-    def __init__(self, storeFile, searchHistorySize):
+    def __init__(self, log, storeFile, searchHistorySize):
+        self.log = log
         self.storeFile = storeFile
         self.searchHistorySize = searchHistorySize
                     
@@ -58,8 +59,8 @@ class SearchHistory(object):
                     entry = self._parseEntry(line)
                     if entry is not None:
                         entries.append(entry)
-        except IOError:
-            pass
+        except IOError, e:
+            self.log.error(LOG_PREFIX + "caught exception while loading search history using store-file '{}', exception: {}", self.storeFile, e)
         return entries
                 
     def _parseEntry(self, line):
@@ -76,14 +77,17 @@ class SearchHistory(object):
         
         if contentTypes == 'None':
             contentTypes = None
-        #xbmc.log("_parseEntry: " + str(date) + "-" + query, level=xbmc.LOGNOTICE)
+        #self.log.info(LOG_PREFIX + "_parseEntry: " + str(date) + "-" + query)
         return HistoryEntry(query, contentTypes, date)  
 
     def _saveEntries(self, entries):
-        #xbmc.log("_saveEntries: " + str(len(entries)), level=xbmc.LOGNOTICE)
+        #self.log.info(LOG_PREFIX + "_saveEntries: " + str(len(entries)))
                  
-        file = open(self.storeFile, "w")
-        for entry in entries:
-            date = entry.date #getDateFormatted()
-            file.write('{0} {1} {2}\n'.format(date, entry.contentTypes, entry.query))
-        file.close()
+        try:
+            file = open(self.storeFile, "w")
+            for entry in entries:
+                date = entry.date #getDateFormatted()
+                file.write('{0} {1} {2}\n'.format(date, entry.contentTypes, entry.query))
+            file.close()
+        except IOError, e:
+            self.log.error(LOG_PREFIX + "caught exception while saving search history using store-file '{}', exception: {}", self.storeFile, e)

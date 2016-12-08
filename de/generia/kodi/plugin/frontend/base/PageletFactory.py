@@ -1,8 +1,8 @@
 
 class PageletFactory(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, log):
+        self.log = log
                  
     def createPagelet(self, pageletId, params):
         pass

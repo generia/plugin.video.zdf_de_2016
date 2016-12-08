@@ -25,8 +25,8 @@ from de.generia.kodi.plugin.frontend.zdf.search.SearchHistoryPage import SearchH
 class MediathekFactory(PageletFactory):
     settings = None
     
-    def __init__(self, settings=None):
-        super(MediathekFactory, self).__init__()
+    def __init__(self, log, settings=None):
+        super(MediathekFactory, self).__init__(log)
         self.settings = settings
         
     def createPagelet(self, pageletId, params):
@@ -53,4 +53,4 @@ class MediathekFactory(PageletFactory):
         addon = Addon()
         profileDir = xbmc.translatePath(addon.getAddonInfo('profile'))
         storeFile  = os.path.join(profileDir, 'searchHistory.txt') 
-        return SearchHistory(storeFile, self.settings.searchHistorySize)
+        return SearchHistory(self.log, storeFile, self.settings.searchHistorySize)
