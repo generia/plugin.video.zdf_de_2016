@@ -1,5 +1,5 @@
 <project name="jc" basedir="." default="dist">
-	<property name="version" value="1.0.1"/>
+	<property name="version" value="1.0.2"/>
 	<property name="baseName" value="plugin.video.zdf_de_2016"/>
 	<property name="zipFile" value="${baseName}-${version}.zip"/>
 
@@ -16,6 +16,7 @@
 				<include name="resources/**"/>
 				<include name="addon.py"/>
 				<include name="icon.png"/>
+				<include name="icon-mm.png"/>
 				<include name="fanart.png"/>
 			</fileset>
 		</copy>
