@@ -71,24 +71,24 @@ class PlayVideo(Pagelet):
                 if image is not None:
                     item.setArt({'poster': image, 'banner': image, 'thumb': image, 'icon': image, 'fanart': image})
 
-                subTitlesUrl = streamInfo.subTitlesUrl
-                if subTitlesUrl is not None:
-                    item.addStreamInfo('subtitle', {'language': 'de'})
+                # set subtitles
+                self.setSubTitles(item, streamInfo.subTitlesUrl)
                 
                 dialog.update(percent=90, message=self._(32010))
                 self.info("setting resolved url='{1}' ...", url)
                 xbmcplugin.setResolvedUrl(response.handle, True, item)
-
-                if subTitlesUrl is not None:
-                    self.info("setting sub-titles-url='{1}' ...", subTitlesUrl)
-                    # give xbmc player a chance to start the video so the subtitle is attached to the video at hand
-                    # NOTE: sleep is not so nice - maybe there is a better solution for it 
-                    xbmc.sleep(1000)
-                    xbmc.Player().setSubtitles(subTitlesUrl)
-                    self.info("setting sub-titles-url='{1}' ... done.", subTitlesUrl)
-                else:
-                    self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
-                    
             finally:
                 dialog.close();
+            
+        
+    def setSubTitles(self, item, subTitlesUrl):            
+        if subTitlesUrl is not None:
+            try:
+                item.addStreamInfo('subtitle', {'language': 'de'})
+                item.setSubtitles([subTitlesUrl])
+                self.info("setting sub-titles-url='{1}' ...", subTitlesUrl)
+            except AttributeError:
+                self.info("no sub-titles supported before Kodi 14.x 'Helix', skipping subtitles ...")
+        else:
+            self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
             
