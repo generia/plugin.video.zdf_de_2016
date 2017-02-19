@@ -11,6 +11,7 @@ from de.generia.kodi.plugin.backend.zdf.LiveTvResource import LiveTvResource
 from de.generia.kodi.plugin.backend.zdf.ConfigurationResource import ConfigurationResource
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
+from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
         
 def getUrl(url):
     print "getUrl: " + url
@@ -30,12 +31,16 @@ query = {'q': "Die Chefin"}
 queryParams = urllib.urlencode(query)
 searchUrl = baseUrl + "/suche?" + queryParams
 #searchUrl = "http://www.cloudev.de/"
-'''
+
 configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
-'''
+streamInfoUrl = 'https://api.zdf.de/tmd/2/ngplayer_2_3/vod/ptmd/mediathek/170209_sendung_sok8'
+streamInfo = StreamInfoResource(streamInfoUrl, configuration.apiToken)
+streamInfo.parse()
+print "streamUrl: " + streamInfo.streamUrl + ", subTitleUrl: " + streamInfo.subTitlesUrl + "'"
 
+'''
 searchPage = SearchResource(searchUrl)
 searchPage.parse()
 print str(searchPage.resultsPerPage) + " - #" + str(searchPage.results)
@@ -43,7 +48,7 @@ for teaser in searchPage.teasers:
     print "- " + str(teaser)
 if searchPage.moreUrl is not None:
     print "load-more: " + searchPage.moreUrl
-
+'''
 '''
 teaser = searchPage.teasers[1]
 videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
