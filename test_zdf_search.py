@@ -35,11 +35,12 @@ searchUrl = baseUrl + "/suche?" + queryParams
 configuration = ConfigurationResource(configUrl)
 configuration.parse()
 print "Api-Token: " + configuration.apiToken
+'''
 streamInfoUrl = 'https://api.zdf.de/tmd/2/ngplayer_2_3/vod/ptmd/mediathek/170209_sendung_sok8'
 streamInfo = StreamInfoResource(streamInfoUrl, configuration.apiToken)
 streamInfo.parse()
 print "streamUrl: " + streamInfo.streamUrl + ", subTitleUrl: " + streamInfo.subTitlesUrl + "'"
-
+'''
 '''
 searchPage = SearchResource(searchUrl)
 searchPage.parse()
@@ -57,12 +58,12 @@ videoContent.parse()
 
 print "Video-Content '" + teaser.contentName + "' -> url: '" + videoContent.url + "'"
 '''
-'''
+
 navigationResource = NavigationResource(baseUrl)
 navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
-'''
+
 '''
 liveTvResource = LiveTvResource(baseUrl + '/live-tv')
 liveTvResource.parse()
