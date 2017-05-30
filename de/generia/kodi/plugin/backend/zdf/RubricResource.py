@@ -8,6 +8,7 @@ from de.generia.kodi.plugin.backend.zdf.Regex import compile
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
 
 fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
+fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]*)</h\d>')
 
 moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)<span')
@@ -68,6 +69,8 @@ class RubricResource(HtmlResource):
         pos = 0
         title = None
         fallbackTitleMatch = fallbackTitlePattern.search(self.content, pos)
+        if fallbackTitleMatch is None:
+            fallbackTitleMatch = fallbackTitlePattern2.search(self.content, pos)
         if fallbackTitleMatch is not None:
             title = stripHtml(fallbackTitleMatch.group(1))
             pos = fallbackTitleMatch.end(0)
