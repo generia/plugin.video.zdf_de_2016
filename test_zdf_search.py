@@ -76,7 +76,8 @@ for teaser in liveTvResource.teasers:
 #rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
 #rubric = '/meist-gesehen'
 #rubric = '/politik/phoenix-runde'
-rubric = '/barrierefreiheit-im-zdf'
+#rubric = '/barrierefreiheit-im-zdf'
+rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
 #rubric = '/comedy'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()

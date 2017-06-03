@@ -64,6 +64,8 @@ class RubricResource(HtmlResource):
             self.clusters.append(cluster)
             self._parseClusterTeasers(cluster)
             
+        self.isRedirect = len(self.clusters) == 0 and len(self.teasers) == 0 and self.responseLocation != self.url
+
     def _parseClusters(self):
             
         pos = 0
