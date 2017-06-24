@@ -50,14 +50,16 @@ for teaser in searchPage.teasers:
 if searchPage.moreUrl is not None:
     print "load-more: " + searchPage.moreUrl
 '''
-'''
-teaser = searchPage.teasers[1]
-videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
-videoContent = VideoContentResource(videoContentUrl, configuration.apiToken)
+
+#teaser = searchPage.teasers[1]
+#videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
+#videoContentUrl = 'https://api.zdf.de/content/documents/heute-journal-vom-9-juni-2017-100.json?profile=player'
+videoContentUrl = 'https://api.zdf.de/content/documents/bares-fuer-rares---lieblingsstuecke-vom-25-juni-2017-100.json?profile=player'
+videoContent = VideoContentResource(videoContentUrl, baseUrl, configuration.apiToken)
 videoContent.parse()
 
-print "Video-Content '" + teaser.contentName + "' -> url: '" + videoContent.url + "'"
-'''
+print "Video-Content url: '" + videoContent.url + "'"
+
 '''
 navigationResource = NavigationResource(baseUrl)
 navigationResource.parse()
