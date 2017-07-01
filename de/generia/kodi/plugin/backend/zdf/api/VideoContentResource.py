@@ -33,6 +33,7 @@ class VideoContentResource(ApiResource):
             
         self.url = None
         self.duration = None
+        self.streamInfoUrl = None
         if 'mainVideoContent' in self.content:
             mainVideoContent = self.content.get('mainVideoContent')
             target = mainVideoContent.get('http://zdf.de/rels/target')
