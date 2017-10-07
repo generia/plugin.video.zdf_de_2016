@@ -1,4 +1,4 @@
-from de.generia.kodi.plugin.backend.zdf.AbstractConfigurationResource import AbstractConfigurationResource
+from de.generia.kodi.plugin.backend.zdf.AbstractPageResource import AbstractPageResource
 
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
@@ -6,15 +6,16 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
+from operator import pos
 
 fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
 fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]*)</h\d>')
 
 moduleItemPattern = getTagPattern('div', 'item-caption')
-moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)<span')
+moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)</?[^>]*>')
 moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
 
-listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-content-module[^"]*)"[^>]*>')
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -35,7 +36,7 @@ class Cluster(object):
         return "<Cluster '%s' teasers='%d'>" % (self.title, len(self.teasers))
     
     
-class RubricResource(AbstractConfigurationResource):
+class RubricResource(AbstractPageResource):
 
     def __init__(self, url, listType=None, listStart=-1, listEnd=-1):
         super(RubricResource, self).__init__(url)
@@ -81,13 +82,19 @@ class RubricResource(AbstractConfigurationResource):
         while match is not None:
             pos = match.end(0)
             class_ = match.group(1)
-            if class_.find('b-content-module') != -1:
+            if self._isModule(class_):
                 match = self._parseModule(pos)
             else:
                 match = self._parseCluster(pos, class_, title)
 
+    def _isModule(self, class_):
+        return class_.find('b-content-module') != -1
+    
     def _parseModule(self, pos):
         match = listPattern.search(self.content, pos)
+        
+        teaser = Teaser()
+        pos = teaser.parseApiToken(self.content, pos)
 
         moduleItemMatch = moduleItemPattern.search(self.content, pos)
         if moduleItemMatch is not None:
@@ -96,7 +103,6 @@ class RubricResource(AbstractConfigurationResource):
             if match is not None:
                 end = match.end(0)
             item = self.content[pos:end]
-            teaser = Teaser()
             p = teaser.parseLabel(item, 0)
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
@@ -106,7 +112,7 @@ class RubricResource(AbstractConfigurationResource):
                 self.teasers.append(teaser)
 
         return match
-         
+    
     def _parseCluster(self, pos, class_, fallbackTitle):
         titlePattern = clusterTitlePattern
         listType = 'cluster'

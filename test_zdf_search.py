@@ -8,10 +8,13 @@ from de.generia.kodi.plugin.backend.zdf.SearchResource import SearchResource
 from de.generia.kodi.plugin.backend.zdf.NavigationResource import NavigationResource        
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource        
 from de.generia.kodi.plugin.backend.zdf.LiveTvResource import LiveTvResource        
-from de.generia.kodi.plugin.backend.zdf.ConfigurationResource import ConfigurationResource
+from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource        
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
+
+from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
+
         
 def getUrl(url):
     print "getUrl: " + url
@@ -25,16 +28,12 @@ def getUrl(url):
 # https://www.zdf.de/suche?q=heute-show&from=&to=&sender=alle+Sender&attrs=
 
 baseUrl = "https://www.zdf.de"
-configUrl = baseUrl + '/ZDFplayer/configs/zdf/zdf2016/configuration.json'
 
 query = {'q': "Die Chefin"}
 queryParams = urllib.urlencode(query)
 searchUrl = baseUrl + "/suche?" + queryParams
 #searchUrl = "http://www.cloudev.de/"
 
-configuration = ConfigurationResource(configUrl)
-configuration.parse()
-print "Api-Token: " + configuration.apiToken
 '''
 streamInfoUrl = 'https://api.zdf.de/tmd/2/ngplayer_2_3/vod/ptmd/mediathek/170209_sendung_sok8'
 streamInfo = StreamInfoResource(streamInfoUrl, configuration.apiToken)
@@ -54,11 +53,11 @@ if searchPage.moreUrl is not None:
 #teaser = searchPage.teasers[1]
 #videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
 #videoContentUrl = 'https://api.zdf.de/content/documents/heute-journal-vom-9-juni-2017-100.json?profile=player'
-videoContentUrl = 'https://api.zdf.de/content/documents/bares-fuer-rares---lieblingsstuecke-vom-25-juni-2017-100.json?profile=player'
-videoContent = VideoContentResource(videoContentUrl, baseUrl, configuration.apiToken)
-videoContent.parse()
+#videoContentUrl = 'https://api.zdf.de/content/documents/zdf-live-beitrag-100.json?profile=player'
+#videoContent = VideoContentResource(videoContentUrl, baseUrl, Constants.apiToken)
+#videoContent.parse()
 
-print "Video-Content url: '" + videoContent.url + "'"
+#print "Video-Content url: '" + videoContent.streamInfoUrl + "'"
 
 '''
 navigationResource = NavigationResource(baseUrl)
@@ -66,11 +65,16 @@ navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
 '''
-'''
 liveTvResource = LiveTvResource(baseUrl + '/live-tv')
 liveTvResource.parse()
 for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
+'''
+
+video = '/dokumentation/zdfinfo-doku/death-valley-102.html'
+videoResource = VideoResource(baseUrl + video)
+videoResource.parse()
+print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 '''
 
 #rubric = '/krimi'
@@ -79,8 +83,8 @@ for teaser in liveTvResource.teasers:
 #rubric = '/meist-gesehen'
 #rubric = '/politik/phoenix-runde'
 #rubric = '/barrierefreiheit-im-zdf'
-rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
-#rubric = '/comedy'
+#rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
+rubric = '/comedy-show'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:

@@ -3,13 +3,13 @@ from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 apiTokenPattern = compile('<head>.*window.zdfsite\s*=\s*{.*apiToken:\s*\'([^\']*)\'.*</head>')
 
-class AbstractConfigurationResource(HtmlResource):
+class AbstractPageResource(HtmlResource):
 
     def __init__(self, url):
-        super(AbstractConfigurationResource, self).__init__(url)
+        super(AbstractPageResource, self).__init__(url)
             
     def parse(self):
-        super(AbstractConfigurationResource, self).parse()
+        super(AbstractPageResource, self).parse()
 
         self.configApiToken = None
         pos = 0
