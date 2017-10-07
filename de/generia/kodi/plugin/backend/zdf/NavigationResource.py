@@ -8,6 +8,8 @@ from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 leftNavPattern = getTagPattern('ul', 'left-nav')
 dropdownLinksPattern = compile('<a\s*class="[^"]*dropdown-link[^"]*"[^>]*href="([^"]*)"[^>]*data-title="([^"]*)"')
+dropdownListPattern = compile('<ul\s*class="[^"]*dropdown-list[^"]*"[^>]*>')
+menuItemPattern = compile('<li\s*class="[^"]*menu-item[^"]*"[^>]*>')
 
 class Rubric(object):
 
@@ -34,11 +36,31 @@ class NavigationResource(AbstractPageResource):
         leftNav = getTag('ul', self.content, leftNavMatch)     
 
         pos = leftNavMatch.end(0)
-        dropdownLinksMatch = dropdownLinksPattern.search(self.content, pos)
         self.rubrics = []
+
+        # find first dropdown-list
+        dropdownListMatch = dropdownLinksPattern.search(self.content, pos)
+        if dropdownListMatch is None:
+            return
+
+        # find next menu-item
+        pos = dropdownListMatch.end(0)
+        menuItemMatch = menuItemPattern.search(self.content, pos)
+        while menuItemMatch is None:
+            return
+        
+        # reduce content to first dropdown-list
+        navigationStart = pos
+        navigationEnd = menuItemMatch.end(0)
+        self.content = self.content[navigationStart:navigationEnd]
+        
+        self._parseDropDownList(0)
+        
+    def _parseDropDownList(self, pos):
+        dropdownLinksMatch = dropdownLinksPattern.search(self.content, pos)
         urls = Set([]);
         while dropdownLinksMatch is not None:
-            url = self.parseUrl(dropdownLinksMatch.group(1))
+            url = self._parseUrl(dropdownLinksMatch.group(1))
             if url not in urls:
                 urls.add(url)
                 title = stripHtml(dropdownLinksMatch.group(2))
@@ -48,7 +70,7 @@ class NavigationResource(AbstractPageResource):
             dropdownLinksMatch = dropdownLinksPattern.search(self.content, pos)
             
     # strip blanks and possible anchor hash
-    def parseUrl(self, url):
+    def _parseUrl(self, url):
         parsed = url.strip()
         i = url.find('#')
         if i != -1:

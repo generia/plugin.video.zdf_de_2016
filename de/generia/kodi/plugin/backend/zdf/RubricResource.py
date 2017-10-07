@@ -6,7 +6,6 @@ from de.generia.kodi.plugin.backend.zdf.Regex import getTag
 from de.generia.kodi.plugin.backend.zdf.Regex import compile
 
 from de.generia.kodi.plugin.backend.zdf.Teaser import Teaser
-from operator import pos
 
 fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
 fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]*)</h\d>')
