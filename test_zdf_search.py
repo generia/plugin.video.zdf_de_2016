@@ -59,11 +59,11 @@ if searchPage.moreUrl is not None:
 
 #print "Video-Content url: '" + videoContent.streamInfoUrl + "'"
 
-'''
 navigationResource = NavigationResource(baseUrl)
 navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
+
 '''
 liveTvResource = LiveTvResource(baseUrl + '/live-tv')
 liveTvResource.parse()
@@ -71,6 +71,7 @@ for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
 '''
 
+'''
 video = '/dokumentation/zdfinfo-doku/death-valley-102.html'
 videoResource = VideoResource(baseUrl + video)
 videoResource.parse()
