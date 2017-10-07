@@ -13,6 +13,10 @@ class LiveTvPage(AbstractPage):
         liveTvUrl = Constants.baseUrl + '/live-tv'
         liveTvResource = LiveTvResource(liveTvUrl)
         self._parse(liveTvResource)
+                
+        if liveTvResource.configApiToken is not None:
+            apiToken = liveTvResource.configApiToken
+
         for teaser in liveTvResource.teasers:
             item = self._createItem(teaser, apiToken)
             if item is not None:

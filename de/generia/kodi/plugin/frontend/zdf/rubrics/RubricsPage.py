@@ -20,6 +20,10 @@ class RubricsPage(AbstractPage):
 
         navigation = NavigationResource(Constants.baseUrl)
         self._parse(navigation)
+        
+        if navigation.configApiToken is not None:
+            apiToken = navigation.configApiToken
+
         for rubric in navigation.rubrics:
             if self._isExcluded(rubric):
                 continue

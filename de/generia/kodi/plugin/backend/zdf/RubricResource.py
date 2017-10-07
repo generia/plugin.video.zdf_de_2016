@@ -1,4 +1,4 @@
-from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
+from de.generia.kodi.plugin.backend.zdf.AbstractConfigurationResource import AbstractConfigurationResource
 
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
@@ -35,7 +35,7 @@ class Cluster(object):
         return "<Cluster '%s' teasers='%d'>" % (self.title, len(self.teasers))
     
     
-class RubricResource(HtmlResource):
+class RubricResource(AbstractConfigurationResource):
 
     def __init__(self, url, listType=None, listStart=-1, listEnd=-1):
         super(RubricResource, self).__init__(url)

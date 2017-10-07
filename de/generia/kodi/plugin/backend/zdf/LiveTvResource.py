@@ -1,4 +1,4 @@
-from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
+from de.generia.kodi.plugin.backend.zdf.AbstractConfigurationResource import AbstractConfigurationResource
 
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
@@ -12,7 +12,7 @@ contentNamePattern = compile('data-zdfplayer-id="([^"]*)"')
 imagePattern = compile('data-src="([^"]*)"')
 
 
-class LiveTvResource(HtmlResource):
+class LiveTvResource(AbstractConfigurationResource):
 
     def __init__(self, url):
         super(LiveTvResource, self).__init__(url)

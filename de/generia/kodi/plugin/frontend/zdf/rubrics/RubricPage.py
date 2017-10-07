@@ -23,7 +23,10 @@ class RubricPage(AbstractPage):
 
         rubricResource = RubricResource(Constants.baseUrl + rubricUrl, listType, listStart, listEnd)
         self._parse(rubricResource)
-        
+                
+        if rubricResource.configApiToken is not None:
+            apiToken = rubricResource.configApiToken
+
         if rubricResource.isRedirect:
             self.info("redirect detected to url='{}', skipping ...", rubricResource.responseLocation)
             dialog = xbmcgui.Dialog()

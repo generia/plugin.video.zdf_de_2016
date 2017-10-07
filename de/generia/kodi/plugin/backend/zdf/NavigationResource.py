@@ -1,5 +1,5 @@
 from sets import Set
-from de.generia.kodi.plugin.backend.web.HtmlResource import HtmlResource
+from de.generia.kodi.plugin.backend.zdf.AbstractConfigurationResource import AbstractConfigurationResource
 
 from de.generia.kodi.plugin.backend.zdf import stripHtml
 from de.generia.kodi.plugin.backend.zdf.Regex import getTagPattern
@@ -19,7 +19,7 @@ class Rubric(object):
         return "<Rubric '%s' url='%s'>" % (self.title, self.url)
     
     
-class NavigationResource(HtmlResource):
+class NavigationResource(AbstractConfigurationResource):
 
     def __init__(self, url):
         super(NavigationResource, self).__init__(url)

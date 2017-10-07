@@ -87,6 +87,9 @@ class SearchPage(AbstractPage):
         self._parse(searchPage)
         self.info("found '{}' results.", len(searchPage.teasers))
         
+        if searchPage.configApiToken is not None:
+            apiToken = searchPage.configApiToken
+
         if len(searchPage.teasers) == 0:
             response.sendInfo(self._(32013))
         
