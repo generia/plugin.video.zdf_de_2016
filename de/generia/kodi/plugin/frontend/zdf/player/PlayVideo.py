@@ -14,7 +14,6 @@ from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfo
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
 
 from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
-from Carbon.Aliases import false
 
 
 class PlayVideo(Pagelet):
