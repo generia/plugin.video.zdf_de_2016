@@ -34,6 +34,8 @@ class PlayVideo(Pagelet):
         self.apiToken = request.getParam('apiToken')
         if self.apiToken is None:
             self.apiToken = self.tokenCache.getApiToken()
+            if self.apiToken is None:
+                self._refreshApiToken()
             
         item = None
         if contentName is not None:

@@ -33,20 +33,20 @@ class NavigationResource(AbstractPageResource):
             self.warn("can't find navigation in page '{}', no rubrics will be available ...", self.url)
             return
 
-        leftNav = getTag('ul', self.content, leftNavMatch)     
-
         pos = leftNavMatch.end(0)
         self.rubrics = []
 
         # find first dropdown-list
-        dropdownListMatch = dropdownLinksPattern.search(self.content, pos)
+        dropdownListMatch = dropdownListPattern.search(self.content, pos)
         if dropdownListMatch is None:
+            self.warn("can't find first dropdown-list for navigation in page '{}', no rubrics will be available ...", self.url)
             return
 
         # find next menu-item
         pos = dropdownListMatch.end(0)
         menuItemMatch = menuItemPattern.search(self.content, pos)
         while menuItemMatch is None:
+            self.warn("can't find second menu-item for navigation in page '{}', no rubrics will be available ...", self.url)
             return
         
         # reduce content to first dropdown-list
