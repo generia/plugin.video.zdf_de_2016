@@ -85,20 +85,23 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/politik/phoenix-runde'
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
-rubric = '/comedy-show'
+rubric = '/'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
     print teaser
-firstCluster = None
+testCluster = None
+testIndex = 20
+i = 0
 for cluster in rubricResource.clusters:
-    if firstCluster is None:
-        firstCluster = cluster
+    i = i + 1
+    if testIndex == i:
+        testCluster = cluster
     print cluster
     for teaser in cluster.teasers:
         print teaser
 
-rubricResource = RubricResource(baseUrl + rubric, firstCluster.listType, firstCluster.listStart, firstCluster.listEnd)
+rubricResource = RubricResource(baseUrl + rubric, testCluster.listType, testCluster.listStart, testCluster.listEnd)
 rubricResource.parse()
 for cluster in rubricResource.clusters:
     print cluster

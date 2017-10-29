@@ -14,7 +14,10 @@ moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)</?[^>]*>')
 moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
 
-listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*)"[^>]*>')
+stageTeaserPattern = getTagPattern('div', 'title-table')
+stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
+
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -82,22 +85,27 @@ class RubricResource(AbstractPageResource):
             pos = match.end(0)
             class_ = match.group(1)
             if self._isModule(class_):
-                match = self._parseModule(pos)
+                match = self._parseModule(pos, moduleItemPattern, moduleItemTextPattern, moduleItemDatePattern)
+            elif self._isStageTeaser(class_):
+                match = self._parseModule(pos, stageTeaserPattern, stageTeaserTextPattern, moduleItemDatePattern)
             else:
                 match = self._parseCluster(pos, class_, title)
 
     def _isModule(self, class_):
         return class_.find('b-content-module') != -1
     
-    def _parseModule(self, pos):
+    def _isStageTeaser(self, class_):
+        return class_.find('stage-content') != -1
+    
+    def _parseModule(self, pos, contentPattern, textPattern, datePattern):
         match = listPattern.search(self.content, pos)
         
         teaser = Teaser()
         pos = teaser.parseApiToken(self.content, pos)
 
-        moduleItemMatch = moduleItemPattern.search(self.content, pos)
-        if moduleItemMatch is not None:
-            pos = moduleItemMatch.end(0)
+        contentMatch = contentPattern.search(self.content, pos)
+        if contentMatch is not None:
+            pos = contentMatch.end(0)
             end = len(self.content)-1
             if match is not None:
                 end = match.end(0)
@@ -105,8 +113,8 @@ class RubricResource(AbstractPageResource):
             p = teaser.parseLabel(item, 0)
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
-            p = teaser.parseText(item, p, moduleItemTextPattern)
-            p = teaser.parseDate(item, p, moduleItemDatePattern)
+            p = teaser.parseText(item, p, textPattern)
+            p = teaser.parseDate(item, p, datePattern)
             if teaser.valid():
                 self.teasers.append(teaser)
 
