@@ -94,8 +94,8 @@ class Teaser(object):
 
         return endPos
 
-    def parseImage(self, article, pos):
-        sourceMatch = sourcePattern.search(article)
+    def parseImage(self, article, pos, pattern=sourcePattern):
+        sourceMatch = pattern.search(article)
         src = None
         if sourceMatch is not None:
             srcset = sourceMatch.group(1)

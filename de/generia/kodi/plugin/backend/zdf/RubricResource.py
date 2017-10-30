@@ -13,6 +13,7 @@ fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]
 moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)</?[^>]*>')
 moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
+moduleItemImagePattern = compile('class="item-img[^"]*"[^>]*data-srcset="([^"]*)"')
 
 stageTeaserPattern = getTagPattern('div', 'title-table')
 stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
@@ -123,7 +124,8 @@ class RubricResource(AbstractPageResource):
         contentMatch = contentPattern.search(item, pos)
         if contentMatch is not None:
             pos = contentMatch.end(0)
-            p = teaser.parseLabel(item, 0)
+            p = teaser.parseImage(item, 0, moduleItemImagePattern)
+            p = teaser.parseLabel(item, pos)
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
             p = teaser.parseText(item, p, textPattern)

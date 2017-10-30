@@ -91,7 +91,7 @@ rubricResource.parse()
 for teaser in rubricResource.teasers:
     print teaser
 testCluster = None
-testIndex = 2
+testIndex = 1
 i = 0
 for cluster in rubricResource.clusters:
     i = i + 1
