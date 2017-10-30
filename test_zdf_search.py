@@ -58,12 +58,12 @@ if searchPage.moreUrl is not None:
 #videoContent.parse()
 
 #print "Video-Content url: '" + videoContent.streamInfoUrl + "'"
-
+'''
 navigationResource = NavigationResource(baseUrl)
 navigationResource.parse()
 for rubric in navigationResource.rubrics:
     print "Rubric: " + str(rubric)
-
+'''
 '''
 liveTvResource = LiveTvResource(baseUrl + '/live-tv')
 liveTvResource.parse()
@@ -85,17 +85,17 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/politik/phoenix-runde'
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
-rubric = '/'
+rubric = '/nachrichten'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
     print teaser
 testCluster = None
-testIndex = 20
+testIndex = 2
 i = 0
 for cluster in rubricResource.clusters:
     i = i + 1
-    if testIndex == i:
+    if testIndex == i or testCluster is None:
         testCluster = cluster
     print cluster
     for teaser in cluster.teasers:

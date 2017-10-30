@@ -17,13 +17,15 @@ moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
 stageTeaserPattern = getTagPattern('div', 'title-table')
 stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
 
-listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]*)"[^>]*>')
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster [^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]|[^"]*(b-topics-module|b-newsstream)[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
 
 clusterTitlePattern = compile('<h2\s*class="[^"]*cluster-title[^"]*"[^>]*>([^<]*)</h2>')
 clusterItemPattern = getTagPattern('article', 'b-cluster-teaser')
+
+topicsModuleTitlePattern = compile('<h2\s*class="[^"]*big-headline[^"]*"[^>]*>([^<]*)</h2>')
 
 class Cluster(object):
 
@@ -88,6 +90,9 @@ class RubricResource(AbstractPageResource):
                 match = self._parseModule(pos, moduleItemPattern, moduleItemTextPattern, moduleItemDatePattern)
             elif self._isStageTeaser(class_):
                 match = self._parseModule(pos, stageTeaserPattern, stageTeaserTextPattern, moduleItemDatePattern)
+            elif self._isNewsStream(class_):
+                # skip newsstream box for now
+                match = listPattern.search(self.content, pos)
             else:
                 match = self._parseCluster(pos, class_, title)
 
@@ -97,28 +102,37 @@ class RubricResource(AbstractPageResource):
     def _isStageTeaser(self, class_):
         return class_.find('stage-content') != -1
     
+    def _isNewsStream(self, class_):
+        return class_.find('b-newsstream') != -1
+    
     def _parseModule(self, pos, contentPattern, textPattern, datePattern):
         match = listPattern.search(self.content, pos)
+        end = len(self.content)-1
+        if match is not None:
+            end = match.end(0)
+        self._parseModuleRange(pos, end, contentPattern, textPattern, datePattern)
+        return match
+    
+    def _parseModuleRange(self, pos, end, contentPattern, textPattern, datePattern, cluster=None):
+        item = self.content[pos:end]
+        pos = 0
         
         teaser = Teaser()
-        pos = teaser.parseApiToken(self.content, pos)
+        pos = teaser.parseApiToken(item, pos)
 
-        contentMatch = contentPattern.search(self.content, pos)
+        contentMatch = contentPattern.search(item, pos)
         if contentMatch is not None:
             pos = contentMatch.end(0)
-            end = len(self.content)-1
-            if match is not None:
-                end = match.end(0)
-            item = self.content[pos:end]
             p = teaser.parseLabel(item, 0)
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
             p = teaser.parseText(item, p, textPattern)
             p = teaser.parseDate(item, p, datePattern)
             if teaser.valid():
-                self.teasers.append(teaser)
-
-        return match
+                teasers = self.teasers
+                if cluster is not None:
+                    teasers = cluster.teasers
+                teasers.append(teaser)
     
     def _parseCluster(self, pos, class_, fallbackTitle):
         titlePattern = clusterTitlePattern
@@ -126,6 +140,9 @@ class RubricResource(AbstractPageResource):
         if class_.find('b-content-teaser-list') != -1:
             titlePattern = sectionTitlePattern
             listType = 'content'
+        elif class_.find('b-topics-module') != -1:
+            titlePattern = topicsModuleTitlePattern
+            listType = 'topics'
             
         titleMatch = titlePattern.search(self.content, pos)
         cluster = None
@@ -155,6 +172,14 @@ class RubricResource(AbstractPageResource):
             itemPattern = clusterItemPattern
         pos = cluster.listStart
         itemMatch = itemPattern.search(self.content, pos)
+        
+        if cluster.listType == 'topics':
+            moduleEnd = cluster.listEnd
+            if itemMatch is not None and itemMatch.start() < cluster.listEnd:
+                moduleEnd = itemMatch.start()
+            self._parseModuleRange(pos, moduleEnd, moduleItemPattern, moduleItemTextPattern, moduleItemDatePattern, cluster)
+            pos = moduleEnd
+
         while pos < cluster.listEnd and itemMatch is not None:
             teaser = Teaser()
             pos = teaser.parse(self.content, pos, self._getBaseUrl(), itemMatch)
