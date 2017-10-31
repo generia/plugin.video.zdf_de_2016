@@ -14,6 +14,7 @@ moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)</?[^>]*>')
 moduleItemDatePattern = compile('<time[^>]*>([^<]*)</time>')
 moduleItemImagePattern = compile('class="item-img[^"]*"[^>]*data-srcset="([^"]*)"')
+moduleItemVideoPattern = compile('&quot;1280x720&quot;:&quot;([^\?]*)\?cb')
 
 stageTeaserPattern = getTagPattern('div', 'title-table')
 stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
@@ -126,7 +127,15 @@ class RubricResource(AbstractPageResource):
         contentMatch = contentPattern.search(item, pos)
         if contentMatch is not None:
             pos = contentMatch.end(0)
-            p = teaser.parseImage(item, 0, moduleItemImagePattern)
+            # the teaser image for videos is encoded in the video players json parameter 
+            if teaser.apiToken is not None:
+                p = teaser.parseImage(item, 0, moduleItemVideoPattern)
+                image = teaser.image
+                if image is not None:
+                    image = image.replace('\\', '')
+                    teaser.image = image
+            else:
+                p = teaser.parseImage(item, 0, moduleItemImagePattern)
             p = teaser.parseLabel(item, pos)
             p = teaser.parseCategory(item, p)
             p = teaser.parseTitle(item, p, self._getBaseUrl())
