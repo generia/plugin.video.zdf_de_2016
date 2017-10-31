@@ -27,7 +27,7 @@ sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
 clusterTitlePattern = compile('<h2\s*class="[^"]*cluster-title[^"]*"[^>]*>([^<]*)</h2>')
 clusterItemPattern = getTagPattern('article', 'b-cluster-teaser')
 
-topicsModuleTitlePattern = compile('<h2\s*class="[^"]*big-headline[^"]*"[^>]*>([^<]*)</h2>')
+topicsModuleTitlePattern = compile('x-notitle|<h2\s*class="[^"]*big-headline[^"]*"[^>]*>([^<]*)</h2>')
 
 class Cluster(object):
 
@@ -165,6 +165,7 @@ class RubricResource(AbstractPageResource):
             if len(self.clusters) > 0:
                 cluster = self.clusters[len(self.clusters)-1]
         elif titleMatch is not None:
+            # title can be None in case of 'x-notitle' in 'topics' list
             title = stripHtml(titleMatch.group(1))
             pos = titleMatch.end(0)
 
@@ -185,7 +186,10 @@ class RubricResource(AbstractPageResource):
             self._parseClusterTeasers(tmpCluster, True)
             if len(tmpCluster.teasers) > 0:
                 tmpTeaser = tmpCluster.teasers[0]
-                cluster.image = tmpTeaser.image    
+                cluster.image = tmpTeaser.image
+                # use teaser.title as cluster fallback
+                if cluster.title is None:
+                    cluster.title = tmpTeaser.title
 
         return match
     
