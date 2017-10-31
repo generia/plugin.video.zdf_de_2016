@@ -28,6 +28,7 @@ clusterTitlePattern = compile('<h2\s*class="[^"]*cluster-title[^"]*"[^>]*>([^<]*
 clusterItemPattern = getTagPattern('article', 'b-cluster-teaser')
 
 topicsModuleTitlePattern = compile('x-notitle|<h2\s*class="[^"]*big-headline[^"]*"[^>]*>([^<]*)</h2>')
+newsStreamTitlePattern = compile('<h2\s*class="[^"]*visuallyhidden[^"]*"[^>]*>([^<]*)</h2>')
 
 class Cluster(object):
 
@@ -94,9 +95,6 @@ class RubricResource(AbstractPageResource):
                 match = self._parseModule(pos, moduleItemPattern, moduleItemTextPattern, moduleItemDatePattern)
             elif self._isStageTeaser(class_):
                 match = self._parseModule(pos, stageTeaserPattern, stageTeaserTextPattern, moduleItemDatePattern)
-            elif self._isNewsStream(class_):
-                # skip newsstream box for now
-                match = listPattern.search(self.content, pos)
             else:
                 match = self._parseCluster(pos, class_, title)
 
@@ -105,9 +103,6 @@ class RubricResource(AbstractPageResource):
     
     def _isStageTeaser(self, class_):
         return class_.find('stage-content') != -1
-    
-    def _isNewsStream(self, class_):
-        return class_.find('b-newsstream') != -1
     
     def _parseModule(self, pos, contentPattern, textPattern, datePattern):
         match = listPattern.search(self.content, pos)
@@ -153,6 +148,9 @@ class RubricResource(AbstractPageResource):
         if class_.find('b-content-teaser-list') != -1:
             titlePattern = sectionTitlePattern
             listType = 'content'
+        elif class_.find('b-newsstream') != -1:
+            titlePattern = newsStreamTitlePattern
+            listType = 'cluster'
         elif class_.find('b-topics-module') != -1:
             titlePattern = topicsModuleTitlePattern
             listType = 'topics'
