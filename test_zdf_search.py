@@ -70,14 +70,12 @@ liveTvResource.parse()
 for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
 '''
-
 '''
-video = '/dokumentation/zdfinfo-doku/death-valley-102.html'
+video = '/content/documents/heute-journal-vom-2-november-2017-100.json?profile=player'
 videoResource = VideoResource(baseUrl + video)
 videoResource.parse()
 print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 '''
-
 #rubric = '/krimi'
 #rubric = '/dokumentation/zdf-history'
 #rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
@@ -85,7 +83,8 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/politik/phoenix-runde'
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
-rubric = '/nachrichten'
+#rubric = '/nachrichten'
+rubric =  '/serien'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
