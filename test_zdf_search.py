@@ -27,7 +27,8 @@ def getUrl(url):
     
 # https://www.zdf.de/suche?q=heute-show&from=&to=&sender=alle+Sender&attrs=
 
-baseUrl = "https://www.zdf.de"
+baseUrl = Constants.baseUrl
+apiBaseUrl = Constants.apiBaseUrl
 
 query = {'q': "Die Chefin"}
 queryParams = urllib.urlencode(query)
@@ -49,14 +50,17 @@ for teaser in searchPage.teasers:
 if searchPage.moreUrl is not None:
     print "load-more: " + searchPage.moreUrl
 '''
-
+'''
 #teaser = searchPage.teasers[1]
 #videoContentUrl = 'https://api.zdf.de/content/documents/' + teaser.contentName + '.json?profile=player'
 #videoContentUrl = 'https://api.zdf.de/content/documents/heute-journal-vom-9-juni-2017-100.json?profile=player'
 #videoContentUrl = 'https://api.zdf.de/content/documents/zdf-live-beitrag-100.json?profile=player'
-#videoContent = VideoContentResource(videoContentUrl, baseUrl, Constants.apiToken)
-#videoContent.parse()
-
+#videoContentUrl = 'https://api.zdf.de/content/documents/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player'
+videoContentUrl = 'https://api.zdf.de/content/documents/zdf/comedy/heute-show/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player'
+apiToken = '71f18d1df774fbf61390bd6bf419e8e17dd7f484'
+videoContent = VideoContentResource(videoContentUrl, apiBaseUrl, apiToken)
+videoContent.parse()
+'''
 #print "Video-Content url: '" + videoContent.streamInfoUrl + "'"
 '''
 navigationResource = NavigationResource(baseUrl)
@@ -72,6 +76,7 @@ for teaser in liveTvResource.teasers:
 '''
 '''
 video = '/content/documents/heute-journal-vom-2-november-2017-100.json?profile=player'
+https://api.zdf.de/content/documents/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player
 videoResource = VideoResource(baseUrl + video)
 videoResource.parse()
 print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
@@ -84,7 +89,7 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
 #rubric = '/nachrichten'
-rubric =  '/serien'
+rubric =  '/comedy'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
