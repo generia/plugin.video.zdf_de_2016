@@ -9,6 +9,7 @@ from de.generia.kodi.plugin.backend.zdf.NavigationResource import NavigationReso
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource        
 from de.generia.kodi.plugin.backend.zdf.LiveTvResource import LiveTvResource        
 from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource        
+from de.generia.kodi.plugin.backend.zdf.TeaserLazyloadResolver import TeaserLazyloadResolver       
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
@@ -107,11 +108,11 @@ for cluster in rubricResource.clusters:
 
 rubricResource = RubricResource(baseUrl + rubric, testCluster.listType, testCluster.listStart, testCluster.listEnd)
 rubricResource.parse()
+teaserLazyloadResolver = TeaserLazyloadResolver()
 for cluster in rubricResource.clusters:
     print cluster
+    cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
     for teaser in cluster.teasers:
-        print teaser
-    for teaser in cluster.lazyloadTeasers:
         print teaser
 
 '''

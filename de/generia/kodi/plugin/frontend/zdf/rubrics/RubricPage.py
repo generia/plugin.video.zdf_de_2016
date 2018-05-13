@@ -1,7 +1,7 @@
 import xbmcgui
 
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource       
-from de.generia.kodi.plugin.backend.zdf.TeaserLazyloadResource import TeaserLazyloadResource       
+from de.generia.kodi.plugin.backend.zdf.TeaserLazyloadResolver import TeaserLazyloadResolver       
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Item        
@@ -45,17 +45,9 @@ class RubricPage(AbstractPage):
             
     
     def _resolveLazyloadTeasers(self, rubricResource):
+        teaserLazyloadResolver = TeaserLazyloadResolver(self.log)
         for cluster in rubricResource.clusters:
-            resolvedTeasers = []
-            for teaserLazyload in cluster.lazyloadTeasers:
-                resolvedTeaser = self._resolveTeaser(teaserLazyload)
-                if resolvedTeaser is not None:
-                   cluster.teasers.append(resolvedTeaser)            
-     
-    def _resolveTeaser(self, teaserLazyload):
-        teaserLazyloadResource = TeaserLazyloadResource(teaserLazyload)
-        self._parse(teaserLazyloadResource)
-        return teaserLazyloadResource.teaser
+            cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
    
     def _renderClusters(self, clusters, response, rubricUrl):
         for cluster in clusters:
