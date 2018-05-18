@@ -90,7 +90,8 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
 #rubric = '/nachrichten'
-rubric =  '/comedy-show'
+#rubric =  '/comedy-show'
+rubric =  '/'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:

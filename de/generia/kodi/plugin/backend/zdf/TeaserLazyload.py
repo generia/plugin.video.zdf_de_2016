@@ -14,12 +14,13 @@ titlePattern = getAttrPattern('data-cluster-title')
 
 
 class TeaserLazyload(object):
-
+    url = None
+    
     def __init__(self, teaserPattern):
         self.teaserPattern = teaserPattern
                     
     def valid(self):
-        return True 
+        return self.url is not None and self.url[0:1] == '/'
      
     def __str__(self):
         return "<TeaserLazyload url='%s'>" % (self.url)
@@ -48,10 +49,10 @@ class TeaserLazyload(object):
         url = self._appendUrl(url, 'teasertext', text)
         url = self._appendUrl(url, 'clusterTitle', title)
         
-        url = baseUrl + '/teaserElement' + url
+        if url is not None:
+            url = baseUrl + '/teaserElement' + url
         self.url = url
         self.baseUrl = baseUrl
-        print "teaser-lazyload: " + url      
         
         return endPos
 
@@ -64,6 +65,8 @@ class TeaserLazyload(object):
 
 
     def _appendUrl(self, url, attr, value):
+        if value is None:
+            return url
         encodedValue = urllib.quote(value, '')
         if url is None:
             return '?' + attr + '=' + encodedValue
