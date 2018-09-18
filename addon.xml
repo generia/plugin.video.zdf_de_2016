@@ -7,7 +7,7 @@
     <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en_GBb">ZDF Mediathek 2016</summary>
+    <summary lang="en_GB">ZDF Mediathek 2016</summary>
     <summary lang="de_DE">ZDF Mediathek 2016</summary>
     <description lang="en_GB">ZDF Mediathek 2016 new variant after zdf.de website relaunch
     
