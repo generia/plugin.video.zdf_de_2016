@@ -57,8 +57,9 @@ if searchPage.moreUrl is not None:
 #videoContentUrl = 'https://api.zdf.de/content/documents/heute-journal-vom-9-juni-2017-100.json?profile=player'
 #videoContentUrl = 'https://api.zdf.de/content/documents/zdf-live-beitrag-100.json?profile=player'
 #videoContentUrl = 'https://api.zdf.de/content/documents/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player'
-videoContentUrl = 'https://api.zdf.de/content/documents/zdf/comedy/heute-show/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player'
-apiToken = '71f18d1df774fbf61390bd6bf419e8e17dd7f484'
+videoContentUrl = 'https://api.zdf.de/content/documents/zdf/comedy/neo-magazin-mit-jan-boehmermann/neo-magazin-royale-mit-jan-boehmermann-vom-18-oktober-2018-100.json?profile=player2'
+
+apiToken = '0ab30e74d0c15d741cf9cb3ae5c99f8422429d3d'
 videoContent = VideoContentResource(videoContentUrl, apiBaseUrl, apiToken)
 videoContent.parse()
 '''
@@ -90,8 +91,8 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
 #rubric = '/nachrichten'
-#rubric =  '/comedy-show'
-rubric =  '/'
+rubric =  '/comedy-show'
+#rubric =  '/'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
 for teaser in rubricResource.teasers:
@@ -115,7 +116,6 @@ for cluster in rubricResource.clusters:
     cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
     for teaser in cluster.teasers:
         print teaser
-
 '''
 html = getUrl(searchUrl)
 
