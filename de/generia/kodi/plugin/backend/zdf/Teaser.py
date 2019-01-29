@@ -15,9 +15,10 @@ catPattern = compile('class="teaser-cat\s*[^"]*"[^>]*>')
 catCategoryPattern = compile('class="teaser-cat-category\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 catBrandPattern = compile('class="teaser-cat-brand\s*[^"]*"[^>]*>([^<]*)</[^>]*>')
 aPattern = compile('href="([^"]*)"[^>]*>')
-titleIconPattern = compile('class="[^"]*icon-[0-9]*_(play)">')
 textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
-datePattern = compile('class="video-airing"[^>]*>([^<]*)</[^>]*>')
+footPattern = compile('class="teaser-foot"[^>]*>')
+footIconPattern = compile('class="[^"]*icon-[0-9]*_(play)[^"]*">')
+datePattern = compile('class="teaser-info"[^>]*>([^<]*)</[^>]*>')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
 
     
@@ -90,7 +91,7 @@ class Teaser(object):
         pos = self.parseCategory(article, pos)
         pos = self.parseTitle(article, pos, baseUrl)
         pos = self.parseText(article, pos)
-        pos = self.parseDate(article, pos)
+        pos = self.parseFoot(article, pos)
 
         return endPos
 
@@ -154,16 +155,10 @@ class Teaser(object):
         aMatch = aPattern.search(article, pos)
         title = None
         url = None
-        playable = False
         if aMatch is not None:
             url = aMatch.group(1).strip()        
             pos = aMatch.end(0)
             i = pos
-            iconMatch = titleIconPattern.search(article, pos)
-            if iconMatch is not None:    
-                playable =  iconMatch.group(1) == 'play'
-                i = article.find('</span>', pos) + len('</span>')
-
             j = article.find('</a>', i)
             # check for '<span class="arrowhover ...'
             k = article.find('<span class="arrowhover', i)
@@ -176,7 +171,6 @@ class Teaser(object):
     
         self.title = stripHtml(title)
         self.url = url
-        self.playable = playable
         self.contentName = None
         if url is not None:
             if baseUrl is not None and url[0:len(baseUrl)] == baseUrl:
@@ -194,6 +188,22 @@ class Teaser(object):
             pos = textMatch.end(0)
 
         self.text = stripHtml(text)
+        return pos
+
+    def parseFoot(self, article, pos, pattern=footPattern):
+        playable = False
+        footMatch = pattern.search(article, pos)
+        foot = None
+        if footMatch is not None:
+            pos = footMatch.end(0)
+
+            iconMatch = footIconPattern.search(article, pos)
+            if iconMatch is not None:    
+                playable =  iconMatch.group(1) == 'play'
+                pos = article.find('</span>', pos) + len('</span>')
+
+        self.playable = playable
+        pos = self.parseDate(article, pos)
         return pos
         
     def parseDate(self, article, pos, pattern=datePattern):
