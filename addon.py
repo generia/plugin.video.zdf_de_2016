@@ -161,9 +161,9 @@ log.info('[Plugin] - Python-Version: {} {}',  (sys.executable or sys.platform), 
 log.info('[Plugin] - executing url={}{} ...', baseUrl, sys.argv[2][0:])
 start = log.start()
 #xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DATE)
-xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DURATION)
-xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
 xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
+xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_GENRE)
+xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_DURATION)
 
 settings = Settings(handle)
 context = XbmcContext(log, settings)
