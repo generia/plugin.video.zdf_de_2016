@@ -71,7 +71,7 @@ class Teaser(object):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
-        return "<Teaser '%s' url='%s' apiToken='%s'>" % (self.title, self.url, self.apiToken)
+        return "<Teaser '%s' url='%s' apiToken='%s' label='%s'>" % (self.title, self.url, self.apiToken, self.label)
         
 
     def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
@@ -87,10 +87,10 @@ class Teaser(object):
             return endPos
                 
         pos = self.parseImage(article, pos)
-        pos = self.parseLabel(article, pos)
         pos = self.parseCategory(article, pos)
         pos = self.parseTitle(article, pos, baseUrl)
         pos = self.parseText(article, pos)
+        pos = self.parseLabel(article, pos)
         pos = self.parseFoot(article, pos)
 
         return endPos
@@ -114,14 +114,12 @@ class Teaser(object):
             iconMatch = iconPattern.search(labelTags)
             if iconMatch is not None:    
                 type = iconMatch.group(1)
-            i = labelTags.find('</span>') + len('</span>')
+            i = labelTags.find('>') + len('>')
             j = labelTags.rfind('</div>')
             pos = j + len('</div>') 
             label = labelTags[i:j]
-            label = label.replace('<strong>', '')
-            label = label.replace('</strong>', '')
             label = stripTag('abbr', label)
-            label = stripTag('span', label)
+            label = cleanTags(label)
             label = label.strip()
 
         self.label = stripHtml(label)
