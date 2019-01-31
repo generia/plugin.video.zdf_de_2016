@@ -71,7 +71,7 @@ class Teaser(object):
         return self.title is not None and self.url is not None and self.url[0:1] == '/' 
      
     def __str__(self):
-        return "<Teaser '%s' url='%s' apiToken='%s' label='%s'>" % (self.title, self.url, self.apiToken, self.label)
+        return "<Teaser '%s' playable='%s' url='%s' apiToken='%s' label='%s'>" % (self.title, self.playable, self.url, self.apiToken, self.label)
         
 
     def parse(self, string, pos=0, baseUrl=None, teaserMatch=None):
@@ -201,17 +201,22 @@ class Teaser(object):
                 pos = article.find('</span>', pos) + len('</span>')
 
         self.playable = playable
-        pos = self.parseDate(article, pos)
+        pos = self.parseDuration(article, pos)
         return pos
         
-    def parseDate(self, article, pos, pattern=datePattern):
-        dateMatch = pattern.search(article, pos)
-        date = None
-        if dateMatch is not None:
-            date = dateMatch.group(1).strip()
-            pos = dateMatch.end(0)
+    def parseDuration(self, article, pos, pattern=datePattern):
+        durationMatch = pattern.search(article, pos)
+        duration = None
+        if durationMatch is not None:
+            duration = durationMatch.group(1).strip()
+            duration = duration.replace(' min', '')
+            if duration.isdigit():
+                duration = int(duration) * 60
+            else:
+                uuration = None
+            pos = durationMatch.end(0)
     
-        self.date = date
+        self.duration = duration
         return pos
 
 

@@ -90,10 +90,16 @@ class XbmcResponse(Response):
         infoLabels['sorttitle'] = title
         infoLabels['genre'] = item.genre
         infoLabels['plot'] = item.text
+        if item.genre is not None:
+            infoLabels['plot'] = item.genre + '\n' + infoLabels['plot']
 
         date = item.date
         if date is not None and date != "":
             infoLabels['date'] = date
+
+        duration = item.duration
+        if duration is not None and duration != "":
+            infoLabels['Duration'] = duration
 
         li = xbmcgui.ListItem(title, item.text)
         if item.image is not None:
