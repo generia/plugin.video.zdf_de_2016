@@ -205,3 +205,7 @@ msgstr "Die Seite '{0}' wurde vom ZDF Server weitergeleitet zu '{1}'. Dies is ei
 msgctxt "#32043"
 msgid "Homepage zdf.de"
 msgstr "Startseite zdf.de"
+
+msgctxt "#32044"
+msgid "Downloading master stream ..."
+msgstr "Lade Master Stream ..."

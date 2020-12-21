@@ -10,6 +10,7 @@ from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
+from de.generia.kodi.plugin.backend.zdf.M3u8MasterResource import M3u8MasterResource        
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
@@ -56,12 +57,17 @@ class PlayVideo(Pagelet):
                 self.debug("downloading stream-info-url '{1}' ...", videoContent.streamInfoUrl)
                 streamInfo = self._getStreamInfo(videoContent.streamInfoUrl)
                 
-                url = streamInfo.streamUrl
-                if url is None:
+                masterStreamUrl = streamInfo.streamUrl
+                if masterStreamUrl is None:
                     self.warn("can't find stream-url in stream-info-url '{1}' in content '{2}'", videoContent.streamInfoUrl, streamInfo.content)
                     response.sendError(self._(32012) + " '" + contentName +"'", Action('SearchPage'))
                     return
 
+                # finding best stream url
+                dialog.update(percent=70, message=self._(32044))
+                self.debug("downloading master stream url '{1}' ...", masterStreamUrl)
+                url = self._getBestStreamUrl(masterStreamUrl)
+                
                 title = videoContent.title
                 text = videoContent.text
                 infoLabels = {}
@@ -155,4 +161,15 @@ class PlayVideo(Pagelet):
                 self.info("no sub-titles supported before Kodi 14.x 'Helix', skipping subtitles ...")
         else:
             self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
-            
+ 
+    def _getBestStreamUrl(self, masterStreamUrl):
+        try:
+            masterResource = M3u8MasterResource(masterStreamUrl)
+            self._parse(masterResource)
+            bestStreamUrl = masterResource.getBestStreamUrl()
+            if bestStreamUrl is None:
+                bestStreamUrl = masterStreamUrl
+            return bestStreamUrl
+        except HTTPError as e:
+            self.warn("could not load master stream url '{1}', using fallback ...", masterStreamUrl)
+            return masterStreamUrl

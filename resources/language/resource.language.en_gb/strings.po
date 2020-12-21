@@ -187,3 +187,7 @@ msgstr ""
 msgctxt "#32043"
 msgid "Homepage zdf.de"
 msgstr ""
+
+msgctxt "#32044"
+msgid "Downloading master stream ..."
+msgstr ""
