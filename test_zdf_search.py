@@ -9,6 +9,7 @@ from de.generia.kodi.plugin.backend.zdf.NavigationResource import NavigationReso
 from de.generia.kodi.plugin.backend.zdf.RubricResource import RubricResource        
 from de.generia.kodi.plugin.backend.zdf.LiveTvResource import LiveTvResource        
 from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource        
+from de.generia.kodi.plugin.backend.zdf.M3u8MasterResource import M3u8MasterResource        
 from de.generia.kodi.plugin.backend.zdf.TeaserLazyloadResolver import TeaserLazyloadResolver       
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
@@ -77,12 +78,20 @@ for teaser in liveTvResource.teasers:
     print "Teaser: " + str(teaser)
 '''
 '''
-video = '/content/documents/heute-journal-vom-2-november-2017-100.json?profile=player'
-https://api.zdf.de/content/documents/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player
+#video = '/content/documents/heute-journal-vom-2-november-2017-100.json?profile=player'
+video = '/comedy/3sat-festival/till-reiners-real-bleiben-100.html'
+#https://api.zdf.de/content/documents/heute-show---der-jahresrueckblick-vom-15-dezember-2017-100.json?profile=player
 videoResource = VideoResource(baseUrl + video)
 videoResource.parse()
 print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 '''
+'''
+master = "https://zdfvodnone-vh.akamaihd.net/i/meta-files/3sat/smil/m3u8/300/20/09/200920_urban_priol_3satfestival/3/200920_urban_priol_3satfestival.smil/master.m3u8"
+masterResource = M3u8MasterResource(master)
+masterResource.parse()
+streamUrl = masterResource.getBestStreamUrl()
+'''
+
 #rubric = '/krimi'
 #rubric = '/dokumentation/zdf-history'
 #rubric = '/doku-wissen/themenseite-doku-wissen-astronomie-100.html'
@@ -91,7 +100,10 @@ print "Video-Resource apiToken: '" + videoResource.configApiToken + "'"
 #rubric = '/barrierefreiheit-im-zdf'
 #rubric = '/comedy/neo-magazin-mit-jan-boehmermann'
 #rubric = '/nachrichten'
-rubric =  '/comedy-show'
+#rubric = '/nachrichten/heute-journal'
+rubric = '/sendungen-a-z?group=h'
+#rubric = '/nachrichten/heute/neujahrsansprache-von-bundeskanzlerin-merkel-100.html'
+#rubric =  '/comedy-show'
 #rubric =  '/'
 rubricResource = RubricResource(baseUrl + rubric)
 rubricResource.parse()
@@ -108,14 +120,15 @@ for cluster in rubricResource.clusters:
     for teaser in cluster.teasers:
         print teaser
 
-rubricResource = RubricResource(baseUrl + rubric, testCluster.listType, testCluster.listStart, testCluster.listEnd)
-rubricResource.parse()
-teaserLazyloadResolver = TeaserLazyloadResolver()
-for cluster in rubricResource.clusters:
-    print cluster
-    cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
-    for teaser in cluster.teasers:
-        print teaser
+if testCluster is not None:
+    rubricResource = RubricResource(baseUrl + rubric, testCluster.listType, testCluster.listStart, testCluster.listEnd)
+    rubricResource.parse()
+    teaserLazyloadResolver = TeaserLazyloadResolver()
+    for cluster in rubricResource.clusters:
+        print cluster
+        cluster.teasers.extend(teaserLazyloadResolver.resolveTeasers(cluster.lazyloadTeasers))
+        for teaser in cluster.teasers:
+            print teaser
 '''
 html = getUrl(searchUrl)
 
