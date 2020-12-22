@@ -27,4 +27,6 @@ def cleanTags(string):
     cleaned = re.sub(r'</?[^>]*>', '', string)
     cleaned = cleaned.replace("&#39;", "'")
     cleaned = cleaned.replace("&nbsp;", " ")
-    return cleaned
+    cleaned = cleaned.replace("\n", " ")
+    cleaned = re.sub(r'  *', ' ', cleaned)
+    return cleaned.strip()
