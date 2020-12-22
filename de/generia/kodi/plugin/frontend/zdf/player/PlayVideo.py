@@ -10,7 +10,7 @@ from de.generia.kodi.plugin.backend.zdf.VideoResource import VideoResource
 
 from de.generia.kodi.plugin.backend.zdf.api.VideoContentResource import VideoContentResource
 from de.generia.kodi.plugin.backend.zdf.api.StreamInfoResource import StreamInfoResource
-from de.generia.kodi.plugin.backend.zdf.M3u8MasterResource import M3u8MasterResource        
+from de.generia.kodi.plugin.backend.zdf.PlaylistResource import PlaylistResource        
 
 from de.generia.kodi.plugin.frontend.base.Pagelet import Action        
 from de.generia.kodi.plugin.frontend.base.Pagelet import Pagelet        
@@ -20,9 +20,10 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 class PlayVideo(Pagelet):
     
-    def __init__(self, tokenCache):
+    def __init__(self, tokenCache, filterMasterPlaylist):
         super(Pagelet, self).__init__()
         self.tokenCache = tokenCache
+        self.filterMasterPlaylist = filterMasterPlaylist
 
     def service(self, request, response):
         contentName = request.getParam('contentName')
@@ -57,16 +58,16 @@ class PlayVideo(Pagelet):
                 self.debug("downloading stream-info-url '{1}' ...", videoContent.streamInfoUrl)
                 streamInfo = self._getStreamInfo(videoContent.streamInfoUrl)
                 
-                masterStreamUrl = streamInfo.streamUrl
-                if masterStreamUrl is None:
+                rawPlaylistUrl = streamInfo.streamUrl
+                if rawPlaylistUrl is None:
                     self.warn("can't find stream-url in stream-info-url '{1}' in content '{2}'", videoContent.streamInfoUrl, streamInfo.content)
                     response.sendError(self._(32012) + " '" + contentName +"'", Action('SearchPage'))
                     return
 
                 # finding best stream url
                 dialog.update(percent=70, message=self._(32044))
-                self.debug("downloading master stream url '{1}' ...", masterStreamUrl)
-                url = self._getBestStreamUrl(masterStreamUrl)
+                self.debug("downloading master playlist '{1}' ...", rawPlaylistUrl)
+                url = self._getPlaylistUrl(rawPlaylistUrl)
                 
                 title = videoContent.title
                 text = videoContent.text
@@ -162,14 +163,21 @@ class PlayVideo(Pagelet):
         else:
             self.info("no sub-titles-url available in stream-info, skipping subtitles ...")
  
-    def _getBestStreamUrl(self, masterStreamUrl):
+    def _getPlaylistUrl(self, rawPlaylistUrl):
+        if not self.filterMasterPlaylist:
+            return rawPlaylistUrl
+        
+        masterResource = PlaylistResource(rawPlaylistUrl)
         try:
-            masterResource = M3u8MasterResource(masterStreamUrl)
             self._parse(masterResource)
-            bestStreamUrl = masterResource.getBestStreamUrl()
-            if bestStreamUrl is None:
-                bestStreamUrl = masterStreamUrl
-            return bestStreamUrl
         except HTTPError as e:
-            self.warn("could not load master stream url '{1}', using fallback ...", masterStreamUrl)
-            return masterStreamUrl
+            self.warn("could not load master playlist '{1}', falling back to raw playlist...", rawPlaylistUrl)
+            return rawPlaylistUrl
+
+        playlist = masterResource.getPlaylist()
+        if playlist is not None:
+            self.tokenCache.storePlaylist(playlist)
+            return self.tokenCache.getPlaylistUrl()
+        self.warn("could not filter playlist '{1}', falling back to raw playlist...", rawPlaylistUrl)
+        return rawPlaylistUrl
+    

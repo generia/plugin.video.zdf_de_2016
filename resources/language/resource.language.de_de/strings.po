@@ -207,5 +207,14 @@ msgid "Homepage zdf.de"
 msgstr "Startseite zdf.de"
 
 msgctxt "#32044"
-msgid "Downloading master stream ..."
-msgstr "Lade Master Stream ..."
+msgid "Downloading master playlist ..."
+msgstr "Lade Master Playlist ..."
+
+msgctxt "#32045"
+msgid "Player"
+msgstr "Player"
+
+msgctxt "#32046"
+msgid "Filter master playlist for best resolution"
+msgstr "Filtere Master Playlist nach höchster Auflösung"
+

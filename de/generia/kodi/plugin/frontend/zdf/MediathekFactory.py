@@ -50,7 +50,7 @@ class MediathekFactory(PageletFactory):
         if pageletId == 'ShowsAzPage':
             return ShowsAzPage()
         if pageletId == 'PlayVideo':
-            return PlayVideo(self._createTokenCache(context))
+            return PlayVideo(self._createTokenCache(context), self.settings.filterMasterPlaylist)
         
         return Mediathek()
         
@@ -62,4 +62,5 @@ class MediathekFactory(PageletFactory):
     def _createTokenCache(self, context):
         profileDir = context.getProfileDir()
         storeFile  = os.path.join(profileDir, 'tokenCache.txt') 
-        return TokenCache(self.log, storeFile)
+        playlistFile  = os.path.join(profileDir, 'tmpfilteredPlaylist.m3u8') 
+        return TokenCache(self.log, storeFile, playlistFile)
