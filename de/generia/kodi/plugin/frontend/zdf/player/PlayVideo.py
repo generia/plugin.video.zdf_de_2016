@@ -20,9 +20,9 @@ from de.generia.kodi.plugin.frontend.zdf.Constants import Constants
 
 class PlayVideo(Pagelet):
     
-    def __init__(self, tokenCache, filterMasterPlaylist):
+    def __init__(self, playerStore, filterMasterPlaylist):
         super(Pagelet, self).__init__()
-        self.tokenCache = tokenCache
+        self.playerStore = playerStore
         self.filterMasterPlaylist = filterMasterPlaylist
 
     def service(self, request, response):
@@ -36,7 +36,7 @@ class PlayVideo(Pagelet):
         self.videoUrl = request.getParam('videoUrl')
         self.apiToken = request.getParam('apiToken')
         if self.apiToken is None:
-            self.apiToken = self.tokenCache.getApiToken()
+            self.apiToken = self.playerStore.getApiToken()
             if self.apiToken is None:
                 self._refreshApiToken()
             
@@ -148,7 +148,7 @@ class PlayVideo(Pagelet):
         video = VideoResource(Constants.baseUrl + self.videoUrl)
         self._parse(video)
         apiToken = video.apiToken
-        self.tokenCache.setApiToken(apiToken)
+        self.playerStore.setApiToken(apiToken)
         self.apiToken = apiToken
         return True
     
@@ -176,8 +176,8 @@ class PlayVideo(Pagelet):
 
         playlist = masterResource.getPlaylist()
         if playlist is not None:
-            self.tokenCache.storePlaylist(playlist)
-            return self.tokenCache.getPlaylistUrl()
+            self.playerStore.storePlaylist(playlist)
+            return self.playerStore.getPlaylistUrl()
         self.warn("could not filter playlist '{1}', falling back to raw playlist...", rawPlaylistUrl)
         return rawPlaylistUrl
     
