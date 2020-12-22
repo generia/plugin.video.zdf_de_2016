@@ -59,8 +59,10 @@ class PlaylistResource(Resource):
                         bandwith = int(match.group(1))
                         if bandwith == maxBandwidth:
                             streamUrl = programMap[bandwith]
+                            streamUrl = self._getAbsoluteUrl(self.url, streamUrl)
                             filteredLines.append(line)
                             filteredLines.append(streamUrl)
                 else:
                     filteredLines.append(line)
         return filteredLines
+        
