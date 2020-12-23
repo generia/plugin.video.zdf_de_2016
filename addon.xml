@@ -21,7 +21,7 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 	<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
 	<source>https://github.com/generia/plugin.video.zdf_de_2016</source>
 	<email>alex at generia dot de</email>
-	<website>http://www.zdf.de/</website>
+	<website>https://www.zdf.de/</website>
     <platform>all</platform>
     <news>
 1.0.17 (2020-12-22)
