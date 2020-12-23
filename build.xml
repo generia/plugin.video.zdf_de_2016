@@ -16,8 +16,10 @@
 				<include name="resources/**"/>
 				<include name="addon.py"/>
 				<include name="icon.png"/>
-				<include name="icon-mm.png"/>
-				<include name="fanart.png"/>
+				<include name="icon-mm.jpg"/>
+				<include name="hgeins-100.jpg"/>
+				<include name="hgvier-100.jpg"/>
+				<include name="fanart.jpg"/>
 			</fileset>
 		</copy>
 		<zip destfile="dist/${zipFile}" basedir="dist" >
