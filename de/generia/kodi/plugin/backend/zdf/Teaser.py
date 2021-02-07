@@ -218,7 +218,7 @@ class Teaser(object):
             teaserInfo = getTag('dd', article, teaserInfoMatch)
 
             teaserInfo = cleanTags(teaserInfo)
-            sep = u' \xb7 '.encode('utf-8')
+            sep = u'\xb7'.encode('utf-8')
             parts = teaserInfo.split(sep)
             for part in parts:
                 part = part.strip()

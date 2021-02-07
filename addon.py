@@ -143,6 +143,7 @@ class Settings(object):
         self.showGenreInTitle = xbmcplugin.getSetting(handle, 'showGenreInTitle') == 'true'
         self.showPlayableInTitle = xbmcplugin.getSetting(handle, 'showPlayableInTitle') == 'true'
         self.showTagsInTitle = xbmcplugin.getSetting(handle, 'showTagsInTitle') == 'true'
+        self.showEpisodeInTitle = xbmcplugin.getSetting(handle, 'showEpisodeInTitle') == 'true'
         # Player
         self.filterMasterPlaylist = xbmcplugin.getSetting(handle, 'filterMasterPlaylist') == 'true'
 
