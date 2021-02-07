@@ -226,3 +226,7 @@ msgctxt "#32048"
 msgid "Show Season and Episode in Title"
 msgstr "Zeige Staffel und Folge im Titel"
 
+msgctxt "#32049"
+msgid "Disable Subtitles"
+msgstr "Deaktiviere Untertitel"
+

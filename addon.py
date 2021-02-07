@@ -151,6 +151,7 @@ class Settings(object):
         self.showEpisodeInTitle = xbmcplugin.getSetting(handle, 'showEpisodeInTitle') == 'true'
         # Player
         self.filterMasterPlaylist = xbmcplugin.getSetting(handle, 'filterMasterPlaylist') == 'true'
+        self.disableSubtitles = xbmcplugin.getSetting(handle, 'disableSubtitles') == 'true'
 
 
 baseUrl = sys.argv[0]

@@ -207,3 +207,7 @@ msgstr ""
 msgctxt "#32048"
 msgid "Show Season and Episode in Title"
 msgstr ""
+
+msgctxt "#32049"
+msgid "Disable Subtitles"
+msgstr ""
