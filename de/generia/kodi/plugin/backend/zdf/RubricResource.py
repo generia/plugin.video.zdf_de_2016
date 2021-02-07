@@ -185,9 +185,16 @@ class RubricResource(AbstractPageResource):
         cluster = None
         title = fallbackTitle
         # if content-teaser-list has no title, use previous cluster to calculate list end
-        if class_.find('b-content-teaser-list x-notitle') != -1:
+        if class_.find('b-content-teaser-list no-title') != -1:
             if len(self.clusters) > 0:
                 cluster = self.clusters[len(self.clusters)-1]
+            else:
+                nextClusterMatch = listPattern.search(self.content, pos)
+                tmpCluster = Cluster(None, listType, pos, nextClusterMatch.end(0))
+                self._parseClusterTeasers(tmpCluster)
+                self.teasers.extend(tmpCluster.teasers)
+                return nextClusterMatch
+                
         elif titleMatch is not None:
             # title can be None in case of 'x-notitle' in 'topics' list
             title = stripHtml(titleMatch.group(1))
