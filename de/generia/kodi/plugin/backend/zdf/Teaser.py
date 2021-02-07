@@ -19,6 +19,7 @@ textPattern = compile('class="teaser-text"[^>]*>([^<]*)</[^>]*>')
 footPattern = compile('class="teaser-foot\s*[^"]*"[^>]*>')
 footIconPattern = compile('class="[^"]*icon-[0-9]*_(play)[^"]*">')
 teaserInfoPattern = getTagPattern('dd', 'teaser-info')
+teaserInfoIsTiviPattern = getTagPattern('span', 'is-tivi')
 teaserInfoDurationPattern = compile('(.*) min')
 teaserInfoEpisodePattern = compile('S(..) F(..)')
 apiTokenPattern = compile('"apiToken"\s*:\s*"([^"]*)"')
@@ -216,7 +217,9 @@ class Teaser(object):
         genre = None
         if teaserInfoMatch is not None:
             teaserInfo = getTag('dd', article, teaserInfoMatch)
-
+            isTiviMatch = teaserInfoIsTiviPattern.search(teaserInfo)
+            if isTiviMatch is not None:
+                teaserInfo = teaserInfo[0:isTiviMatch.start(0)]            
             teaserInfo = cleanTags(teaserInfo)
             sep = u'\xb7'.encode('utf-8')
             parts = teaserInfo.split(sep)
