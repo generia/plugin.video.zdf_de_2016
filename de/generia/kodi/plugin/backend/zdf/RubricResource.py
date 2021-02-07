@@ -13,7 +13,6 @@ from urlparse import urlparse
 
 fallbackTitlePattern = compile('<li\s*class="item current"[^>]*>[^<]*<a[^>]*>([^<]*)</a>')
 fallbackTitlePattern2 = compile('<h\d\s*class="[^"]*stage-title[^"]*"[^>]*>([^<]*)</h\d>')
-fallbackTitlePattern3 = compile('<h\d.*class="[^"]*big-headline[^"]*"[^>]*>(.*)</h1>')
 
 moduleItemPattern = getTagPattern('div', 'item-caption')
 moduleItemTextPattern = compile('class="item-description"[^>]*>([^<]*)</?[^>]*>')
@@ -26,7 +25,7 @@ postContentPattern = getTagPattern('div', 'details')
 stageTeaserPattern = getTagPattern('div', 'title-table')
 stageTeaserTextPattern = compile('class="teaser-text"[^>]*>([^<]*)</?[^>]*>')
 
-listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster\s[^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-post-content[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]|[^"]*(b-topics-module|b-newsstream)[^"]*)"[^>]*>')
+listPattern = compile('class="([^"]*b-cluster|[^"]*b-cluster\s[^"]*|[^"]*b-content-teaser-list[^"]*|[^"]*b-group-persons[^"]*|[^"]*b-post-content[^"]*|[^"]*b-(content|video)-module[^"]*|[^"]*stage-content[^"]|[^"]*(b-topics-module|b-newsstream)[^"]*)"[^>]*>')
 
 sectionTitlePattern = compile('<h2\s*class="[^"]*title[^"]*"[^>]*>([^<]*)</h2>')
 sectionItemPattern = getTagPattern('article', 'b-content-teaser-item')
@@ -95,8 +94,6 @@ class RubricResource(AbstractPageResource):
         fallbackTitleMatch = fallbackTitlePattern.search(self.content, pos)
         if fallbackTitleMatch is None:
             fallbackTitleMatch = fallbackTitlePattern2.search(self.content, pos)
-        if fallbackTitleMatch is None:
-            fallbackTitleMatch = fallbackTitlePattern3.search(self.content, pos)
         if fallbackTitleMatch is not None:
             title = stripTag('span', fallbackTitleMatch.group(1))
             title = stripHtml(title)
@@ -113,6 +110,9 @@ class RubricResource(AbstractPageResource):
                 match = self._parseModule(pos, postContentPattern, moduleItemTextPattern, moduleItemDatePattern, MODULE_TYPE_POST_CONTENT)
             elif self._isStageTeaser(class_):
                 match = self._parseModule(pos, stageTeaserPattern, stageTeaserTextPattern, moduleItemDatePattern, MODULE_TYPE_STAGE_TEASER)
+            elif self._isGroupPersons(class_):
+                # just skip group persons, no teasers in this section
+                match = listPattern.search(self.content, pos)
             else:
                 match = self._parseCluster(pos, class_, title)
 
@@ -124,6 +124,9 @@ class RubricResource(AbstractPageResource):
     
     def _isStageTeaser(self, class_):
         return class_.find('stage-content') != -1
+    
+    def _isGroupPersons(self, class_):
+        return class_.find('b-group-persons') != -1
     
     def _parseModule(self, pos, contentPattern, textPattern, datePattern, moduleType):
         match = listPattern.search(self.content, pos)

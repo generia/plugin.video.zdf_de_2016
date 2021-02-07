@@ -28,7 +28,7 @@ Siehe auch https://github.com/generia/plugin.video.zdf_de_2016
 - fix "unplayable" videos (github issue #18)
 - added setting to show season/episode info in titles
 - added setting to disable subtitles (github issue #9)
-- improved teaser parsing
+- improved teaser parsing and performance
 
 1.0.17 (2020-12-22)
 - fix for low video quality in Kodi 18 (github issue #17)
